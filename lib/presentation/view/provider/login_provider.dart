@@ -17,7 +17,6 @@ class LoginProvider extends ChangeNotifier {
   final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
   bool _isLoading = false;
-
   LoginResult? _loginResult;
   String? _errorMessage;
 
@@ -62,7 +61,7 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
-  // Login Logic
+  // Method Login
   Future<void> login(BuildContext context) async {
     if (!_formKey.currentState!.validate()) return;
 
