@@ -5,10 +5,10 @@ import 'package:story_app_dicoding_intermediate/domain/repositories/auth_reposit
 import '../../common/error/failure.dart';
 import '../entities/login_result.dart';
 
-class Login {
+class PostLogin {
   final AuthRepository authRepository;
 
-  Login(this.authRepository);
+  PostLogin(this.authRepository);
 
   // Menjalankan proses login
   Future<Either<Failure, LoginResult>> execute(LoginParams params) {

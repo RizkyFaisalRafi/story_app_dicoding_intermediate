@@ -4,7 +4,7 @@ import 'package:story_app_dicoding_intermediate/data/data_sources/remote/auth_re
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/login_provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/register_provider.dart';
 import 'package:http/http.dart' as http;
-import 'data/repository/login_repository_impl.dart';
+import 'data/repository/auth_repository_impl.dart';
 import 'presentation/router/app_router.dart';
 
 void main() {
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     final router = appRouter.router;
     final httpClient = http.Client();
     final remoteDataSource = AuthRemoteDatasourceImpl(client: httpClient);
-    final repository = LoginRepositoryImpl(remoteDataSource: remoteDataSource);
+    final repository = AuthRepositoryImpl(remoteDataSource: remoteDataSource);
 
     return MultiProvider(
       providers: [

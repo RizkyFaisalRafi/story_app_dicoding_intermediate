@@ -7,10 +7,10 @@ import 'package:story_app_dicoding_intermediate/data/data_sources/remote/auth_re
 import 'package:story_app_dicoding_intermediate/domain/entities/login_result.dart';
 import 'package:story_app_dicoding_intermediate/domain/repositories/auth_repository.dart';
 
-class LoginRepositoryImpl extends AuthRepository {
+class AuthRepositoryImpl extends AuthRepository {
   final AuthRemoteDatasource remoteDataSource;
 
-  LoginRepositoryImpl({required this.remoteDataSource});
+  AuthRepositoryImpl({required this.remoteDataSource});
 
   @override
   Future<Either<Failure, LoginResult>> login({
@@ -31,5 +31,11 @@ class LoginRepositoryImpl extends AuthRepository {
       // Menangani No Internet atau Network Issue
       return const Left(ConnectionFailure("Failed to connect to the network"));
     }
+  }
+  
+  @override
+  Future<Either<Failure, LoginResult>> register({required String name, required String email, required String password}) {
+    // TODO: implement register
+    throw UnimplementedError();
   }
 }
