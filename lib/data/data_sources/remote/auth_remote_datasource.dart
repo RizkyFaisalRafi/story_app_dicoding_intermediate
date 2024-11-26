@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:story_app_dicoding_intermediate/common/error/exception.dart';
-import 'package:story_app_dicoding_intermediate/data/models/login_response_model.dart';
+import '../../../common/error/exception.dart';
+import '../../models/login_response_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:story_app_dicoding_intermediate/data/models/register_response_model.dart';
+import '../../models/register_response_model.dart';
 
 abstract class AuthRemoteDatasource {
   /// Fungsi untuk login dengan email dan password

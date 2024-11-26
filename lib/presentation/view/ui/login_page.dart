@@ -5,14 +5,14 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:colorful_iconify_flutter/icons/logos.dart';
 import 'package:iconify_flutter/icons/eva.dart';
 import 'package:provider/provider.dart';
-import 'package:story_app_dicoding_intermediate/presentation/design_system/components/button.dart';
-import 'package:story_app_dicoding_intermediate/presentation/design_system/components/custom_text_field.dart';
-import 'package:story_app_dicoding_intermediate/presentation/design_system/components/spaces.dart';
-import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/theme.dart';
-import 'package:story_app_dicoding_intermediate/presentation/design_system/widgets/dialog_animate.dart';
-import 'package:story_app_dicoding_intermediate/presentation/design_system/widgets/logo_button.dart';
-import 'package:story_app_dicoding_intermediate/presentation/view/provider/login_provider.dart';
-import 'package:story_app_dicoding_intermediate/presentation/router/route_constants.dart';
+import '../../design_system/components/button.dart';
+import '../../design_system/components/custom_text_field.dart';
+import '../../design_system/components/spaces.dart';
+import '../../design_system/constants/theme.dart';
+import '../../design_system/widgets/dialog_animate.dart';
+import '../../design_system/widgets/logo_button.dart';
+import '../provider/login_provider.dart';
+import '../../router/route_constants.dart';
 import 'package:wx_divider/wx_divider.dart';
 
 import '../../../common/state_enum.dart';
@@ -139,14 +139,14 @@ class LoginPage extends StatelessWidget {
                                 Consumer<LoginProvider>(
                                     builder: (context, data, child) {
                                   final stateData = data.state;
-                                  if (stateData == RequestState.Empty) {
+                                  if (stateData == RequestState.empty) {
                                     return buttonLogIn(data, context);
                                   } else if (stateData ==
-                                      RequestState.Loading) {
+                                      RequestState.loading) {
                                     return const CircularProgressIndicator();
-                                  } else if (stateData == RequestState.Loaded) {
+                                  } else if (stateData == RequestState.loaded) {
                                     return buttonLogIn(data, context);
-                                  } else if (stateData == RequestState.Error) {
+                                  } else if (stateData == RequestState.error) {
                                     return buttonLogIn(data, context);
                                   } else {
                                     return const Text('Undefined State');

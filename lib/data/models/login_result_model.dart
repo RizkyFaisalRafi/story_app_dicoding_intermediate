@@ -1,4 +1,4 @@
-import 'package:story_app_dicoding_intermediate/domain/entities/login_result.dart';
+import '../../domain/entities/login_result.dart';
 
 class LoginResultModel extends LoginResult {
   const LoginResultModel({

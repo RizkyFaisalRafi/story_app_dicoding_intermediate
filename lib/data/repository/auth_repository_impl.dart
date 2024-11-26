@@ -1,12 +1,12 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:dartz/dartz.dart';
-import 'package:story_app_dicoding_intermediate/common/error/exception.dart';
-import 'package:story_app_dicoding_intermediate/common/error/failure.dart';
-import 'package:story_app_dicoding_intermediate/data/data_sources/remote/auth_remote_datasource.dart';
-import 'package:story_app_dicoding_intermediate/domain/entities/login_result.dart';
-import 'package:story_app_dicoding_intermediate/domain/entities/register.dart';
-import 'package:story_app_dicoding_intermediate/domain/repositories/auth_repository.dart';
+import '../../common/error/exception.dart';
+import '../../common/error/failure.dart';
+import '../data_sources/remote/auth_remote_datasource.dart';
+import '../../domain/entities/login_result.dart';
+import '../../domain/entities/register.dart';
+import '../../domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   final AuthRemoteDatasource remoteDataSource;

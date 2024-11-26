@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:story_app_dicoding_intermediate/data/data_sources/remote/auth_remote_datasource.dart';
-import 'package:story_app_dicoding_intermediate/domain/repositories/auth_repository.dart';
-import 'package:story_app_dicoding_intermediate/domain/use_case/post_login.dart';
-import 'package:story_app_dicoding_intermediate/domain/use_case/post_register.dart';
-import 'package:story_app_dicoding_intermediate/presentation/view/provider/login_provider.dart';
-import 'package:story_app_dicoding_intermediate/presentation/view/provider/register_provider.dart';
+import 'data/data_sources/remote/auth_remote_datasource.dart';
+import 'domain/use_case/post_login.dart';
+import 'domain/use_case/post_register.dart';
+import 'presentation/view/provider/login_provider.dart';
+import 'presentation/view/provider/register_provider.dart';
 import 'package:http/http.dart' as http;
 import 'data/repository/auth_repository_impl.dart';
 import 'presentation/router/app_router.dart';

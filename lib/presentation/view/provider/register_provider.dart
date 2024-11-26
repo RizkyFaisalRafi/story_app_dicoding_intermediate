@@ -1,11 +1,11 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:story_app_dicoding_intermediate/common/error/failure.dart';
-import 'package:story_app_dicoding_intermediate/domain/entities/register.dart';
-import 'package:story_app_dicoding_intermediate/domain/repositories/auth_repository.dart';
-import 'package:story_app_dicoding_intermediate/domain/use_case/post_register.dart';
-import 'package:story_app_dicoding_intermediate/presentation/router/route_constants.dart';
+import '../../../common/error/failure.dart';
+import '../../../domain/entities/register.dart';
+import '../../../domain/repositories/auth_repository.dart';
+import '../../../domain/use_case/post_register.dart';
+import '../../router/route_constants.dart';
 import '../../../common/state_enum.dart';
 
 class RegisterProvider extends ChangeNotifier {
@@ -21,7 +21,7 @@ class RegisterProvider extends ChangeNotifier {
   bool _obscureText = true;
   Register? _registerEntities;
   String _errorMessage = '';
-  RequestState _state = RequestState.Empty;
+  RequestState _state = RequestState.empty;
   PostRegister postRegister;
 
   // Getter
@@ -78,7 +78,7 @@ class RegisterProvider extends ChangeNotifier {
 
   // Method Register
   Future<void> register(BuildContext context) async {
-    state == RequestState.Loading;
+    state == RequestState.loading;
     notifyListeners();
 
     final email = _emailController.text;
@@ -86,17 +86,11 @@ class RegisterProvider extends ChangeNotifier {
     final name = _nameController.text;
 
     try {
-      // final result = await authRepository.register(
-      //   name: name,
-      //   email: email,
-      //   password: password,
-      // );
-
       final result = await postRegister.execute(name, email, password);
 
       result.fold(
         (failure) {
-          _state = RequestState.Error;
+          _state = RequestState.error;
           _errorMessage = failure.message;
           log('Register Provider: $_errorMessage');
 
@@ -127,7 +121,7 @@ class RegisterProvider extends ChangeNotifier {
           ));
         },
         (data) {
-          _state = RequestState.Loaded;
+          _state = RequestState.loaded;
           _registerEntities = data;
           notifyListeners();
 
@@ -141,7 +135,7 @@ class RegisterProvider extends ChangeNotifier {
         },
       );
     } catch (e) {
-      _state = RequestState.Error;
+      _state = RequestState.error;
       _errorMessage = "Kesalahan tidak terduga: $e";
       log('Unexpected error: $e');
       notifyListeners();

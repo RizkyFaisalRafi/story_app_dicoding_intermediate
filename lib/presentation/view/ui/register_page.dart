@@ -5,11 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/eva.dart';
 import 'package:provider/provider.dart';
-import 'package:story_app_dicoding_intermediate/presentation/design_system/components/button.dart';
-import 'package:story_app_dicoding_intermediate/presentation/design_system/components/spaces.dart';
-import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/theme.dart';
-import 'package:story_app_dicoding_intermediate/presentation/view/provider/register_provider.dart';
-import 'package:story_app_dicoding_intermediate/presentation/router/route_constants.dart';
+import '../../design_system/components/button.dart';
+import '../../design_system/components/spaces.dart';
+import '../../design_system/constants/theme.dart';
+import '../provider/register_provider.dart';
+import '../../router/route_constants.dart';
 
 import '../../../common/state_enum.dart';
 import '../../design_system/components/custom_text_field.dart';
@@ -135,16 +135,16 @@ class RegisterPage extends StatelessWidget {
                                     builder: (context, data, child) {
                                       final stateData = data.state;
 
-                                      if (stateData == RequestState.Empty) {
+                                      if (stateData == RequestState.empty) {
                                         return buttonSignUp(data, context);
                                       } else if (stateData ==
-                                          RequestState.Loading) {
+                                          RequestState.loading) {
                                         return const CircularProgressIndicator();
                                       } else if (stateData ==
-                                          RequestState.Loaded) {
+                                          RequestState.loaded) {
                                         return buttonSignUp(data, context);
                                       } else if (stateData ==
-                                          RequestState.Error) {
+                                          RequestState.error) {
                                         return buttonSignUp(data, context);
                                       } else {
                                         return const Text('Undefined State');

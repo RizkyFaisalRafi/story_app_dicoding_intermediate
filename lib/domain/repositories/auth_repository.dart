@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:story_app_dicoding_intermediate/common/error/failure.dart';
-import 'package:story_app_dicoding_intermediate/domain/entities/login_result.dart';
-import 'package:story_app_dicoding_intermediate/domain/entities/register.dart';
+import '../../common/error/failure.dart';
+import '../entities/login_result.dart';
+import '../entities/register.dart';
 
 abstract class AuthRepository {
   // Login

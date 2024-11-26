@@ -1,8 +1,8 @@
 import 'package:go_router/go_router.dart';
-import 'package:story_app_dicoding_intermediate/presentation/view/ui/home_page.dart';
-import 'package:story_app_dicoding_intermediate/presentation/view/ui/login_page.dart';
-import 'package:story_app_dicoding_intermediate/presentation/view/ui/register_page.dart';
-import 'package:story_app_dicoding_intermediate/presentation/router/route_constants.dart';
+import '../view/ui/home_page.dart';
+import '../view/ui/login_page.dart';
+import '../view/ui/register_page.dart';
+import 'route_constants.dart';
 
 class AppRouter {
   final router = GoRouter(

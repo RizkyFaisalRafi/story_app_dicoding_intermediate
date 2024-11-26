@@ -1,12 +1,12 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:story_app_dicoding_intermediate/common/error/failure.dart';
-import 'package:story_app_dicoding_intermediate/common/state_enum.dart';
-import 'package:story_app_dicoding_intermediate/domain/entities/login_result.dart';
-import 'package:story_app_dicoding_intermediate/domain/repositories/auth_repository.dart';
-import 'package:story_app_dicoding_intermediate/domain/use_case/post_login.dart';
-import 'package:story_app_dicoding_intermediate/presentation/router/route_constants.dart';
+import '../../../common/error/failure.dart';
+import '../../../common/state_enum.dart';
+import '../../../domain/entities/login_result.dart';
+import '../../../domain/repositories/auth_repository.dart';
+import '../../../domain/use_case/post_login.dart';
+import '../../router/route_constants.dart';
 
 class LoginProvider extends ChangeNotifier {
   final AuthRepository authRepository;
@@ -22,7 +22,7 @@ class LoginProvider extends ChangeNotifier {
   bool _obscureText = true;
   LoginResult? _loginResult;
   String _errorMessage = '';
-  RequestState _state = RequestState.Empty;
+  RequestState _state = RequestState.empty;
   PostLogin postLogin;
 
   // Getter
@@ -70,7 +70,7 @@ class LoginProvider extends ChangeNotifier {
   Future<void> login(
     BuildContext context,
   ) async {
-    _state = RequestState.Loading;
+    _state = RequestState.loading;
     // if (!_formKey.currentState!.validate()) return;
     notifyListeners();
 
@@ -81,7 +81,7 @@ class LoginProvider extends ChangeNotifier {
       final result = await postLogin.execute(email, password);
       result.fold(
         (failure) {
-          _state = RequestState.Error;
+          _state = RequestState.error;
           _errorMessage = failure.message;
           log('Login Provider: $_errorMessage');
 
@@ -112,7 +112,7 @@ class LoginProvider extends ChangeNotifier {
           ));
         },
         (data) {
-          _state = RequestState.Loaded;
+          _state = RequestState.loaded;
           _loginResult = data;
           notifyListeners();
 
@@ -126,7 +126,7 @@ class LoginProvider extends ChangeNotifier {
         },
       );
     } catch (e) {
-      _state = RequestState.Error;
+      _state = RequestState.error;
       _errorMessage = "Kesalahan tidak terduga: $e";
       log('Unexpected error: $e');
       notifyListeners();

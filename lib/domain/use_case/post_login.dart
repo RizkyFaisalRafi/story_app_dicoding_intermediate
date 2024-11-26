@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:story_app_dicoding_intermediate/domain/repositories/auth_repository.dart';
+import '../repositories/auth_repository.dart';
 import '../../common/error/failure.dart';
 import '../entities/login_result.dart';
 

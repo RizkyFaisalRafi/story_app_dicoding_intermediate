@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:story_app_dicoding_intermediate/domain/entities/register.dart';
+import '../../domain/entities/register.dart';
 
 class RegisterResponseModel extends Equatable {
   final bool error;
