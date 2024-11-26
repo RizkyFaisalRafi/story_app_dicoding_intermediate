@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:story_app_dicoding_intermediate/common/error/exception.dart';
 import 'package:story_app_dicoding_intermediate/data/models/login_response_model.dart';
@@ -60,13 +61,16 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
       } else {
         // Status kode lain dianggap sebagai error server
         log('Response status: ${response.statusCode}, body: ${response.body}');
-        throw const StatusCodeException(message: 'Failed to login');
+        throw StatusCodeException(
+            message: 'Failed to login ${response.statusCode}');
       }
+    } on SocketException {
+      throw const SocketException("No Internet connection");
     } catch (e) {
       if (e is StatusCodeException) {
         rethrow; // Tetap lempar StatusCodeException
       } else {
-        throw StatusCodeException(message: 'Unexpected error: $e');
+        throw ServerException;
       }
     }
   }
@@ -85,20 +89,38 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     });
 
     try {
-      final response = await client.post(url, body: body);
+      final response = await client.post(
+        url,
+        body: body,
+        headers: {'Content-Type': 'application/json'},
+      );
       if (response.statusCode == 201) {
+        log('Response status: ${response.statusCode}, body: ${response.body}');
         return RegisterResponseModel.fromJson(jsonDecode(response.body));
-      } else if (response.statusCode == 400) {
-        // Unauthorized (Email is already taken)
-        throw const StatusCodeException(message: 'bad request');
+      } else if (response.body.contains('Email is already taken')) {
+        // Email is already taken (400)
+        log('Response status: ${response.statusCode}, body: ${response.body}');
+        throw const StatusCodeException(message: 'Email is already taken');
+      } else if (response.body
+          .contains('Invalid request payload JSON format')) {
+        // Invalid request payload JSON format (400)
+        log('Response status: ${response.statusCode}, body: ${response.body}');
+        throw const StatusCodeException(
+            message: 'Invalid request payload JSON format');
       } else {
         // Status kode lain dianggap sebagai error server
-        log(response.statusCode.toString());
-        throw const ServerException(message: 'Failed to register');
+        log('Response status: ${response.statusCode}, body: ${response.body}');
+        throw StatusCodeException(
+            message: 'Failed to register ${response.statusCode}');
       }
-    } on http.ClientException {
-      // Network error, seperti no internet
-      throw const ServerException(message: 'No internet connection');
+    } on SocketException {
+      throw const SocketException("No Internet connection");
+    } catch (e) {
+      if (e is StatusCodeException) {
+        rethrow; // Tetap lempar StatusCodeException
+      } else {
+        throw ServerException;
+      }
     }
   }
 }

@@ -2,39 +2,38 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_app_dicoding_intermediate/common/error/failure.dart';
-import 'package:story_app_dicoding_intermediate/common/state_enum.dart';
-import 'package:story_app_dicoding_intermediate/domain/entities/login_result.dart';
+import 'package:story_app_dicoding_intermediate/domain/entities/register.dart';
 import 'package:story_app_dicoding_intermediate/domain/repositories/auth_repository.dart';
-import 'package:story_app_dicoding_intermediate/domain/use_case/post_login.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/post_register.dart';
 import 'package:story_app_dicoding_intermediate/presentation/router/route_constants.dart';
+import '../../../common/state_enum.dart';
 
-class LoginProvider extends ChangeNotifier {
+class RegisterProvider extends ChangeNotifier {
   final AuthRepository authRepository;
-
-  LoginProvider({
-    required this.postLogin,
+  RegisterProvider({
+    required this.postRegister,
     required this.authRepository,
   });
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
-  LoginResult? _loginResult;
+  Register? _registerEntities;
   String _errorMessage = '';
   RequestState _state = RequestState.Empty;
-  PostLogin postLogin;
+  PostRegister postRegister;
 
   // Getter
+  TextEditingController get nameController => _nameController;
   TextEditingController get emailController => _emailController;
   TextEditingController get passwordController => _passwordController;
   GlobalKey<FormState> get formKey => _formKey;
   bool get obscureText => _obscureText;
-  LoginResult? get loginResult => _loginResult;
+  Register? get registerEntities => _registerEntities;
   String? get errorMessage => _errorMessage;
   RequestState get state => _state;
 
-  // Toggle Obscure Password
   void toggleObscureText() {
     _obscureText = !_obscureText;
     notifyListeners();
@@ -60,38 +59,55 @@ class LoginProvider extends ChangeNotifier {
     if (pass.isEmpty) {
       return "Password tidak boleh kosong!";
     } else if (pass.split('').length < 8) {
-      return 'Password harus terdiri dari minimal 8 karakter!';
+      return 'Password harus terdiri dari minimal 8 kata!';
     } else {
       return null;
     }
   }
 
-  // Method Login
-  Future<void> login(
-    BuildContext context,
-  ) async {
-    _state = RequestState.Loading;
-    // if (!_formKey.currentState!.validate()) return;
+  // Validate Name
+  String? validateName(name) {
+    if (name.isEmpty) {
+      return "Nama tidak boleh kosong!";
+    } else if (name.split('').length < 4) {
+      return 'Nama harus terdiri dari minimal 4 karakter!';
+    } else {
+      return null;
+    }
+  }
+
+  // Method Register
+  Future<void> register(BuildContext context) async {
+    state == RequestState.Loading;
     notifyListeners();
 
     final email = _emailController.text;
     final password = _passwordController.text;
+    final name = _nameController.text;
 
     try {
-      final result = await postLogin.execute(email, password);
+      // final result = await authRepository.register(
+      //   name: name,
+      //   email: email,
+      //   password: password,
+      // );
+
+      final result = await postRegister.execute(name, email, password);
+
       result.fold(
         (failure) {
           _state = RequestState.Error;
           _errorMessage = failure.message;
-          log('Login Provider: $_errorMessage');
+          log('Register Provider: $_errorMessage');
 
           // Cek tipe kegagalan dan berikan pesan kesalahan yang lebih spesifik
           if (failure is ServerFailure) {
-            if (failure.message.toLowerCase().contains("user not found")) {
-              _errorMessage = "Email atau password salah. Silakan coba lagi.";
+            if (failure.message.contains("Email is already taken")) {
+              _errorMessage =
+                  "Email sudah terdaftar, silahkan gunnakan email yang lain.";
             } else if (failure.message
-                .contains('Invalid request payload JSON format.')) {
-              _errorMessage = "Format email atau password tidak valid.";
+                .contains("Invalid request payload JSON format")) {
+              _errorMessage = "Format nama, email atau password tidak valid.";
             } else {
               log(failure.message);
               _errorMessage =
@@ -103,7 +119,6 @@ class LoginProvider extends ChangeNotifier {
           } else {
             _errorMessage = "Terjadi kesalahan yang tidak diketahui.";
           }
-          notifyListeners();
 
           // Tampilkan pesan error ke pengguna
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -113,16 +128,16 @@ class LoginProvider extends ChangeNotifier {
         },
         (data) {
           _state = RequestState.Loaded;
-          _loginResult = data;
+          _registerEntities = data;
           notifyListeners();
 
           // Tampilkan pesan sukses
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Welcome ${data.name}!'),
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Berhasil Daftar, Silahkan Log In Terlebih Dahulu.'),
             backgroundColor: Colors.green,
           ));
           // Go to Home
-          context.goNamed(RouteConstants.home);
+          context.goNamed(RouteConstants.login);
         },
       );
     } catch (e) {
@@ -144,9 +159,10 @@ class LoginProvider extends ChangeNotifier {
   @override
   void dispose() {
     notifyListeners();
-    log("LoginProvider disposed");
+    log("RegisterProvider disposed");
     _emailController.dispose();
     _passwordController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 }

@@ -23,6 +23,7 @@ class AuthRepositoryImpl extends AuthRepository {
         email: email,
         password: password,
       );
+
       if (result.error) {
         return Left(ServerFailure('Login failed: ${result.message}'));
       } else {
@@ -63,18 +64,27 @@ class AuthRepositoryImpl extends AuthRepository {
         return Left(ServerFailure('Register failed: ${result.message}'));
       } else {
         // Mapping RegisterResponseModel ke Register
-        final register = Register(
-          message: result.message,
-          error: result.error,
-        );
+        // final register = Register(
+        //   message: result.message,
+        //   error: result.error,
+        // );
         log(register.toString());
-        return Right(register);
+        // return Right(register);
+        return Right(result.toEntity());
       }
-    } on ServerException catch (e) {
-      return Left(ServerFailure("Server error: ${e.message}"));
+    } on StatusCodeException catch (e) {
+      if (e.message.contains("Email is already taken")) {
+        return const Left(ServerFailure("Email is already taken"));
+      } else if (e.message.contains('Invalid request payload JSON format')) {
+        return const Left(ServerFailure('Invalid request payload JSON format'));
+      } else {
+        return Left(ServerFailure("Gagal register: ${e.message}"));
+      }
     } on SocketException {
       // Menangani No Internet atau Network Issue
-      return const Left(ConnectionFailure("Failed to connect to the network"));
+      return const Left(ConnectionFailure("failed to connect to the network"));
+    } catch (e) {
+      return Left(ServerFailure("Kesalahan tidak terduga: $e"));
     }
   }
 }
