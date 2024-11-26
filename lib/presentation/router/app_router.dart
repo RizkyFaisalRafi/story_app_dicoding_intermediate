@@ -11,17 +11,17 @@ class AppRouter {
     routes: [
       // Login Page
       GoRoute(
-        name: RouteConstants.login,
-        path: RouteConstants.loginPath,
-        builder: (context, state) => const LoginPage(),
-      ),
-
-      // Register Page
-      GoRoute(
-        name: RouteConstants.register,
-        path: RouteConstants.registerPath,
-        builder: (context, state) => const RegisterPage(),
-      ),
+          name: RouteConstants.login,
+          path: RouteConstants.loginPath,
+          builder: (context, state) => const LoginPage(),
+          routes: [
+            // Register Page
+            GoRoute(
+              name: RouteConstants.register,
+              path: RouteConstants.registerPath,
+              builder: (context, state) => const RegisterPage(),
+            ),
+          ]),
 
       // Home Page
       GoRoute(
