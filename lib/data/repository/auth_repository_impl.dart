@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:story_app_dicoding_intermediate/common/error/exception.dart';
 import 'package:story_app_dicoding_intermediate/common/error/failure.dart';
@@ -20,12 +19,14 @@ class AuthRepositoryImpl extends AuthRepository {
     required String password,
   }) async {
     try {
-      final result =
-          await remoteDataSource.login(email: email, password: password);
+      final result = await remoteDataSource.login(
+        email: email,
+        password: password,
+      );
       if (result.error) {
         return Left(ServerFailure('Login failed: ${result.message}'));
       } else {
-        return Right(result.loginResult!);
+        return Right(result.loginResult as LoginResult);
       }
     } on StatusCodeException catch (e) {
       if (e.message.contains("user not found")) {
