@@ -11,6 +11,7 @@ import 'package:story_app_dicoding_intermediate/presentation/design_system/const
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/register_provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/router/route_constants.dart';
 
+import '../../../common/state_enum.dart';
 import '../../design_system/components/custom_text_field.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -32,6 +33,18 @@ class RegisterPage extends StatelessWidget {
 
           CustomScrollView(
             slivers: [
+              SliverAppBar(
+                backgroundColor: const Color(0xffFC6A67),
+                centerTitle: true,
+                title: Text(
+                  'Sign Up',
+                  style: fontPoppins.copyWith(
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: weightSemiBold,
+                  ),
+                ),
+              ),
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
@@ -64,9 +77,19 @@ class RegisterPage extends StatelessWidget {
                             ),
                             const SpaceHeight(32),
                             Form(
-                              key: provider.globalKey,
+                              key: provider.formKey,
                               child: Column(
                                 children: [
+                                  // Form Name
+                                  CustomTextField(
+                                    validate: provider.validateName,
+                                    fillColor: Colors.white,
+                                    filledForm: true,
+                                    controller: provider.nameController,
+                                    label: 'Name',
+                                  ),
+                                  const SpaceHeight(24),
+
                                   // Form Email
                                   CustomTextField(
                                     validate: provider.validateEmail,
@@ -104,54 +127,34 @@ class RegisterPage extends StatelessWidget {
                                       );
                                     },
                                   ),
-                                  const SpaceHeight(24),
-
-                                  // Form Name
-                                  CustomTextField(
-                                    validate: provider.validateName,
-                                    fillColor: Colors.white,
-                                    filledForm: true,
-                                    controller: provider.nameController,
-                                    label: 'Name',
-                                  ),
 
                                   const SpaceHeight(40),
 
-                                  // Button Register
-                                  Button.filled(
-                                    onPressed: () {
-                                      if (provider.globalKey.currentState!
-                                          .validate()) {
-                                        try {
-                                          // Register
-                                        } catch (e) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(e.toString()),
-                                            ),
-                                          );
-                                        }
+                                  // Button Sign Up
+                                  Consumer<RegisterProvider>(
+                                    builder: (context, data, child) {
+                                      final stateData = data.state;
+
+                                      if (stateData == RequestState.Empty) {
+                                        return buttonSignUp(data, context);
+                                      } else if (stateData ==
+                                          RequestState.Loading) {
+                                        return const CircularProgressIndicator();
+                                      } else if (stateData ==
+                                          RequestState.Loaded) {
+                                        return buttonSignUp(data, context);
+                                      } else if (stateData ==
+                                          RequestState.Error) {
+                                        return buttonSignUp(data, context);
                                       } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content:
-                                                Text('Mohon isi semua form'),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
+                                        return const Text('Undefined State');
                                       }
                                     },
-                                    label: 'Sign Up',
-                                    borderRadius: 12.0,
-                                    height: 55,
-                                    color: const Color(0xffFC6A67),
                                   ),
 
                                   const SpaceHeight(48),
 
-                                  // Log In
+                                  // Sign In
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -194,6 +197,33 @@ class RegisterPage extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  Button buttonSignUp(RegisterProvider provider, BuildContext context) {
+    return Button.filled(
+      onPressed: () {
+        if (provider.formKey.currentState!.validate()) {
+          try {
+            // Register
+            provider.register(context);
+          } catch (e) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(e.toString())));
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Mohon isi semua form'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      label: 'Sign Up',
+      borderRadius: 12.0,
+      height: 55,
+      color: const Color(0xffFC6A67),
     );
   }
 }

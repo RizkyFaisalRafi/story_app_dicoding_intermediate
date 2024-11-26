@@ -140,14 +140,14 @@ class LoginPage extends StatelessWidget {
                                     builder: (context, data, child) {
                                   final stateData = data.state;
                                   if (stateData == RequestState.Empty) {
-                                    return buttonLogIn(provider, context);
+                                    return buttonLogIn(data, context);
                                   } else if (stateData ==
                                       RequestState.Loading) {
                                     return const CircularProgressIndicator();
                                   } else if (stateData == RequestState.Loaded) {
-                                    return buttonLogIn(provider, context);
+                                    return buttonLogIn(data, context);
                                   } else if (stateData == RequestState.Error) {
-                                    return buttonLogIn(provider, context);
+                                    return buttonLogIn(data, context);
                                   } else {
                                     return const Text('Undefined State');
                                   }
@@ -283,7 +283,7 @@ class LoginPage extends StatelessWidget {
         if (provider.formKey.currentState!.validate()) {
           try {
             // Login
-            final provider = Provider.of<LoginProvider>(context, listen: false);
+            // final provider = Provider.of<LoginProvider>(context, listen: false);
             provider.login(
               context,
             );
