@@ -15,6 +15,8 @@ import 'package:story_app_dicoding_intermediate/presentation/view/provider/login
 import 'package:story_app_dicoding_intermediate/presentation/router/route_constants.dart';
 import 'package:wx_divider/wx_divider.dart';
 
+import '../../../common/state_enum.dart';
+
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
@@ -34,6 +36,18 @@ class LoginPage extends StatelessWidget {
 
           CustomScrollView(
             slivers: [
+              SliverAppBar(
+                backgroundColor: const Color(0xffFC6A67),
+                centerTitle: true,
+                title: Text(
+                  'Sign In',
+                  style: fontPoppins.copyWith(
+                    fontSize: 24,
+                    fontWeight: weightSemiBold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
               SliverList(
                 delegate: SliverChildListDelegate([
                   SafeArea(
@@ -122,39 +136,22 @@ class LoginPage extends StatelessWidget {
                                   ],
                                 ),
                                 const SpaceHeight(28),
-                                Button.filled(
-                                  onPressed: () {
-                                    if (provider.formKey.currentState!
-                                        .validate()) {
-                                      try {
-                                        // Login
-                                        final provider =
-                                            Provider.of<LoginProvider>(context,
-                                                listen: false);
-                                        provider.login(context);
-                                      } catch (e) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(e.toString())));
-                                      }
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Mohon isi semua form'),
-                                          backgroundColor: Colors.red,
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  label:
-                                      context.watch<LoginProvider>().isLoading
-                                          ? 'Loading...'
-                                          : 'Sign In',
-                                  borderRadius: 12.0,
-                                  height: 55,
-                                  color: const Color(0xffFC6A67),
-                                ),
+                                Consumer<LoginProvider>(
+                                    builder: (context, data, child) {
+                                  final stateData = data.state;
+                                  if (stateData == RequestState.Empty) {
+                                    return buttonLogIn(provider, context);
+                                  } else if (stateData ==
+                                      RequestState.Loading) {
+                                    return const CircularProgressIndicator();
+                                  } else if (stateData == RequestState.Loaded) {
+                                    return buttonLogIn(provider, context);
+                                  } else if (stateData == RequestState.Error) {
+                                    return buttonLogIn(provider, context);
+                                  } else {
+                                    return const Text('Undefined State');
+                                  }
+                                }),
                               ],
                             ),
                           ),
@@ -277,6 +274,36 @@ class LoginPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Button buttonLogIn(LoginProvider provider, BuildContext context) {
+    return Button.filled(
+      onPressed: () {
+        if (provider.formKey.currentState!.validate()) {
+          try {
+            // Login
+            final provider = Provider.of<LoginProvider>(context, listen: false);
+            provider.login(
+              context,
+            );
+          } catch (e) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(e.toString())));
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Mohon isi semua form'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      label: 'Sign In',
+      borderRadius: 12.0,
+      height: 55,
+      color: const Color(0xffFC6A67),
     );
   }
 }

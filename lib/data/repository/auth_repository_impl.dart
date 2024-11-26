@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -5,6 +6,7 @@ import 'package:story_app_dicoding_intermediate/common/error/exception.dart';
 import 'package:story_app_dicoding_intermediate/common/error/failure.dart';
 import 'package:story_app_dicoding_intermediate/data/data_sources/remote/auth_remote_datasource.dart';
 import 'package:story_app_dicoding_intermediate/domain/entities/login_result.dart';
+import 'package:story_app_dicoding_intermediate/domain/entities/register.dart';
 import 'package:story_app_dicoding_intermediate/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -25,17 +27,53 @@ class AuthRepositoryImpl extends AuthRepository {
       } else {
         return Right(result.loginResult!);
       }
+    } on StatusCodeException catch (e) {
+      if (e.message.contains("user not found")) {
+        return const Left(
+            ServerFailure("Email atau password salah / user not found."));
+      } else if (e.message.contains('Invalid request payload JSON format')) {
+        return const Left(
+            ServerFailure('Invalid request payload JSON format.'));
+      } else {
+        return Left(ServerFailure("Gagal login: ${e.message}"));
+      }
+    } on SocketException {
+      // Menangani No Internet atau Network Issue
+      return const Left(ConnectionFailure("failed to connect to the network"));
+    } catch (e) {
+      return Left(ServerFailure("Kesalahan tidak terduga: $e"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Register>> register({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final result = await remoteDataSource.register(
+        name: name,
+        email: email,
+        password: password,
+      );
+
+      if (result.error) {
+        return Left(ServerFailure('Register failed: ${result.message}'));
+      } else {
+        // Mapping RegisterResponseModel ke Register
+        final register = Register(
+          message: result.message,
+          error: result.error,
+        );
+        log(register.toString());
+        return Right(register);
+      }
     } on ServerException catch (e) {
       return Left(ServerFailure("Server error: ${e.message}"));
     } on SocketException {
       // Menangani No Internet atau Network Issue
       return const Left(ConnectionFailure("Failed to connect to the network"));
     }
-  }
-  
-  @override
-  Future<Either<Failure, LoginResult>> register({required String name, required String email, required String password}) {
-    // TODO: implement register
-    throw UnimplementedError();
   }
 }

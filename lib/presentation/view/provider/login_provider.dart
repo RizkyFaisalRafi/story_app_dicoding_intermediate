@@ -2,32 +2,41 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_app_dicoding_intermediate/common/error/exception.dart';
 import 'package:story_app_dicoding_intermediate/common/error/failure.dart';
+import 'package:story_app_dicoding_intermediate/common/state_enum.dart';
+import 'package:story_app_dicoding_intermediate/data/repository/auth_repository_impl.dart';
+import 'package:story_app_dicoding_intermediate/domain/entities/login_params.dart';
 import 'package:story_app_dicoding_intermediate/domain/entities/login_result.dart';
 import 'package:story_app_dicoding_intermediate/domain/repositories/auth_repository.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/post_login.dart';
 import 'package:story_app_dicoding_intermediate/presentation/router/route_constants.dart';
 
 class LoginProvider extends ChangeNotifier {
   final AuthRepository authRepository;
 
-  LoginProvider({required this.authRepository});
+  LoginProvider({
+    required this.postLogin,
+    required this.authRepository,
+  });
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
-  bool _isLoading = false;
   LoginResult? _loginResult;
-  String? _errorMessage;
+  String _errorMessage = '';
+  RequestState _state = RequestState.Empty;
+  PostLogin postLogin;
 
   // Getter
   TextEditingController get emailController => _emailController;
   TextEditingController get passwordController => _passwordController;
   GlobalKey<FormState> get formKey => _formKey;
   bool get obscureText => _obscureText;
-  bool get isLoading => _isLoading;
   LoginResult? get loginResult => _loginResult;
   String? get errorMessage => _errorMessage;
+  RequestState get state => _state;
 
   // Toggle Obscure Password
   void toggleObscureText() {
@@ -62,55 +71,78 @@ class LoginProvider extends ChangeNotifier {
   }
 
   // Method Login
-  Future<void> login(BuildContext context) async {
-    if (!_formKey.currentState!.validate()) return;
-
-    _isLoading = true;
-    _errorMessage = null;
+  Future<void> login(
+    BuildContext context,
+  ) async {
+    _state = RequestState.Loading;
+    // if (!_formKey.currentState!.validate()) return;
     notifyListeners();
 
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    final result = await authRepository.login(email: email, password: password);
+    try {
+      final result = await postLogin.execute(email, password);
+      result.fold(
+        (failure) {
+          _state = RequestState.Error;
+          _errorMessage = failure.message;
+          log('Login Provider: $_errorMessage');
 
-    result.fold(
-      (failure) {
-        // Cek tipe kegagalan dan berikan pesan kesalahan yang lebih spesifik
-        if (failure is ServerFailure) {
-          if (failure.message.toLowerCase().contains("no internet")) {
+          // Cek tipe kegagalan dan berikan pesan kesalahan yang lebih spesifik
+          if (failure is ServerFailure) {
+            if (failure.message.toLowerCase().contains("user not found")) {
+              _errorMessage = "Email atau password salah. Silakan coba lagi.";
+            } else if (failure.message
+                .contains('Invalid request payload JSON format.')) {
+                  _errorMessage = "Format email atau password tidak valid.";
+            } else {
+              log(failure.message);
+              _errorMessage =
+                  "Terjadi kesalahan pada server. Silakan coba lagi.";
+            }
+          } else if (failure is ConnectionFailure) {
             _errorMessage =
-                "Tidak ada koneksi internet. Silakan periksa koneksi Anda.";
-          } else if (failure.message.toLowerCase().contains("unauthorized")) {
-            _errorMessage = "Email atau password salah. Silakan coba lagi.";
+                "Tidak dapat terhubung ke server. Periksa koneksi internet Anda!";
           } else {
-            _errorMessage = "Terjadi kesalahan pada server. Silakan coba lagi.";
+            _errorMessage = "Terjadi kesalahan yang tidak diketahui.";
           }
-        } else if (failure is ConnectionFailure) {
-          _errorMessage =
-              "Tidak dapat terhubung ke server. Periksa koneksi internet Anda.";
-        } else {
-          _errorMessage = "Terjadi kesalahan yang tidak diketahui.";
-        }
+          notifyListeners();
 
+          // Tampilkan pesan error ke pengguna
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(_errorMessage),
+            backgroundColor: Colors.red,
+          ));
+        },
+        (data) {
+          _state = RequestState.Loaded;
+          _loginResult = data;
+          notifyListeners();
+
+          // Tampilkan pesan sukses
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Welcome ${data.name}!'),
+            backgroundColor: Colors.green,
+          ));
+          // Go to Home
+          context.goNamed(RouteConstants.home);
+        },
+      );
+    } catch (e) {
+      _state = RequestState.Error;
+      _errorMessage = "Kesalahan tidak terduga: $e";
+      log('Unexpected error: $e');
+      notifyListeners();
+
+      // Pesan default untuk error yang tidak diketahui
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(_errorMessage ?? 'Login failed'),
+          content: Text("Terjadi kesalahan tidak terduga: $e"),
           backgroundColor: Colors.red,
         ));
-      },
-      (data) {
-        _loginResult = data;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Welcome ${data.name}!'),
-          backgroundColor: Colors.green,
-        ));
-        // Go to Home
-        context.goNamed(RouteConstants.home);
-      },
-    );
-
-    _isLoading = false;
-    notifyListeners();
+      }
+    }
   }
 
   @override
