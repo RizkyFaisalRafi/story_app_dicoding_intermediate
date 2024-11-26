@@ -1,12 +1,8 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:story_app_dicoding_intermediate/common/error/exception.dart';
 import 'package:story_app_dicoding_intermediate/common/error/failure.dart';
 import 'package:story_app_dicoding_intermediate/common/state_enum.dart';
-import 'package:story_app_dicoding_intermediate/data/repository/auth_repository_impl.dart';
-import 'package:story_app_dicoding_intermediate/domain/entities/login_params.dart';
 import 'package:story_app_dicoding_intermediate/domain/entities/login_result.dart';
 import 'package:story_app_dicoding_intermediate/domain/repositories/auth_repository.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/post_login.dart';
