@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app_dicoding_intermediate/data/data_sources/remote/story_remote_datasource.dart';
+import 'package:story_app_dicoding_intermediate/data/repository/story_repository_impl.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/get_all_story.dart';
+import 'package:story_app_dicoding_intermediate/presentation/view/provider/home_provider.dart';
 import 'data/data_sources/remote/auth_remote_datasource.dart';
 import 'domain/use_case/post_login.dart';
 import 'domain/use_case/post_register.dart';
@@ -22,7 +26,10 @@ class MyApp extends StatelessWidget {
     final router = appRouter.router;
     final httpClient = http.Client();
     final remoteDataSource = AuthRemoteDatasourceImpl(client: httpClient);
+    final remoteDataSourceHome = StoryRemoteDatasourceImpl(client: httpClient);
     final repository = AuthRepositoryImpl(remoteDataSource: remoteDataSource);
+    final repositoryHome =
+        StoryRepositoryImpl(storyRemoteDatasource: remoteDataSourceHome);
 
     return MultiProvider(
       providers: [
@@ -43,6 +50,11 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (context) => HomeProvider(
+            getAllStory: GetAllStory(storyRepository: repositoryHome),
+          ),
+        )
       ],
       child: MaterialApp.router(
         title: 'Story App Dicoding Intermidiate',
