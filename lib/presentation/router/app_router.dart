@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../view/ui/home_page.dart';
 import '../view/ui/login_page.dart';
@@ -27,7 +29,21 @@ class AppRouter {
       GoRoute(
         name: RouteConstants.home,
         path: RouteConstants.homePath,
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) {
+          final token = state.extra as String?;
+          log('Received token in HomePage: $token');
+
+          if (token == null || token.isEmpty) {
+            return const Scaffold(
+              body: Center(
+                child: Text('Error: Token is not found!'),
+              ),
+            );
+          }
+          return HomePage(
+            queryToken: token,
+          );
+        },
       ),
     ],
   );
