@@ -283,7 +283,6 @@ class LoginPage extends StatelessWidget {
         if (provider.formKey.currentState!.validate()) {
           try {
             // Login
-            // final provider = Provider.of<LoginProvider>(context, listen: false);
             provider.login(
               context,
             );
