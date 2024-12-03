@@ -106,23 +106,36 @@ class LoginProvider extends ChangeNotifier {
           notifyListeners();
 
           // Tampilkan pesan error ke pengguna
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(_errorMessage),
-            backgroundColor: Colors.red,
-          ));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(_errorMessage),
+              backgroundColor: Colors.red,
+            ),
+          );
         },
         (data) {
           _state = RequestState.loaded;
           _loginResult = data;
           notifyListeners();
 
+          // if (data.userId == null || data.userId!.isEmpty) {
+          //   _errorMessage = "Login berhasil tetapi ID user tidak ditemukan.";
+          //   log(_errorMessage);
+          //   return;
+          // }
+
+          // Kirim Token ke HomePage
+          context.goNamed(
+            RouteConstants.home,
+            extra: data.token,
+          );
+          log('Navigating to Home with token: ${data.token}');
+
           // Tampilkan pesan sukses
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Welcome ${data.name}!'),
             backgroundColor: Colors.green,
           ));
-          // Go to Home
-          context.goNamed(RouteConstants.home);
         },
       );
     } catch (e) {
