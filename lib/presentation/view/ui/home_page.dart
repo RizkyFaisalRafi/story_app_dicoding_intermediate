@@ -5,27 +5,21 @@ import 'package:provider/provider.dart';
 import 'package:story_app_dicoding_intermediate/common/state_enum.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/theme.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/home_provider.dart';
-
 import '../../design_system/widgets/error_state_widget.dart';
 
 class HomePage extends StatelessWidget {
-  final String queryToken;
   const HomePage({
     super.key,
-    required this.queryToken,
   });
 
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
 
-    // Panggil fetchAllStory saat halaman pertama kali dibuka
+    // Panggil loadStories saat halaman pertama kali dibuka
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        homeProvider.fetchAllStory(
-          context,
-          queryToken,
-        );
+        homeProvider.loadStories(context);
       },
     );
 
@@ -122,7 +116,10 @@ class HomePage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            onTap: () {},
+                            onTap: () async {
+                              // Menghapus data otentikasi dari penyimpanan lokal
+                              await homeProvider.deleteTokenUseCase.execute();
+                            },
                           ),
                         );
                       },

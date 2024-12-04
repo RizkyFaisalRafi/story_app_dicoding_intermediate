@@ -1,19 +1,22 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_app_dicoding_intermediate/data/data_sources/local/auth_local_datasource.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/save_token_usecase.dart';
 import '../../../common/error/failure.dart';
 import '../../../common/state_enum.dart';
 import '../../../domain/entities/login_result.dart';
 import '../../../domain/repositories/auth_repository.dart';
+import '../../../domain/repositories/token_repository.dart';
 import '../../../domain/use_case/post_login.dart';
 import '../../router/route_constants.dart';
 
 class LoginProvider extends ChangeNotifier {
-  final AuthRepository authRepository;
-
   LoginProvider({
     required this.postLogin,
     required this.authRepository,
+    required this.tokenRepository,
+    required this.saveTokenUseCase,
   });
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -24,6 +27,12 @@ class LoginProvider extends ChangeNotifier {
   String _errorMessage = '';
   RequestState _state = RequestState.empty;
   PostLogin postLogin;
+  final AuthRepository authRepository;
+  final TokenRepository tokenRepository;
+  final SaveTokenUseCase saveTokenUseCase;
+
+  // Cek apakah sudah login
+  final isAuth = AuthLocalDatasourceImpl().isAuth();
 
   // Getter
   TextEditingController get emailController => _emailController;
@@ -71,7 +80,6 @@ class LoginProvider extends ChangeNotifier {
     BuildContext context,
   ) async {
     _state = RequestState.loading;
-    // if (!_formKey.currentState!.validate()) return;
     notifyListeners();
 
     final email = _emailController.text;
@@ -113,29 +121,53 @@ class LoginProvider extends ChangeNotifier {
             ),
           );
         },
-        (data) {
+        (data) async {
           _state = RequestState.loaded;
           _loginResult = data;
           notifyListeners();
 
-          // if (data.userId == null || data.userId!.isEmpty) {
-          //   _errorMessage = "Login berhasil tetapi ID user tidak ditemukan.";
-          //   log(_errorMessage);
-          //   return;
-          // }
+          try {
+            // Simpan Data Token menggunakan TokenRepository di Local
+            // await tokenRepository.saveToken(data.token); // Sama saja
+            await saveTokenUseCase.execute(data.token);
 
-          // Kirim Token ke HomePage
-          context.goNamed(
-            RouteConstants.home,
-            extra: data.token,
-          );
-          log('Navigating to Home with token: ${data.token}');
+            if (context.mounted) {
+              // Navigasi ke halaman utama
+              context.goNamed(
+                RouteConstants.home,
+                extra: data.token,
+              );
+              log('Navigating to Home with token: ${data.token}');
 
-          // Tampilkan pesan sukses
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Welcome ${data.name}!'),
-            backgroundColor: Colors.green,
-          ));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Welcome ${data.name}!'),
+                backgroundColor: Colors.green,
+              ));
+            }
+          } catch (e) {
+            log('Error saving token: $e');
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Gagal menyimpan token: $e.'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          }
+
+          // // Kirim Token ke HomePage
+          // context.goNamed(
+          //   RouteConstants.home,
+          //   extra: data.token,
+          // );
+          // log('Navigating to Home with token: ${data.token}');
+
+          // // Tampilkan pesan sukses
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //   content: Text('Welcome ${data.name}!'),
+          //   backgroundColor: Colors.green,
+          // ));
         },
       );
     } catch (e) {

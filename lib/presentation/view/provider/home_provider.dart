@@ -1,9 +1,9 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:story_app_dicoding_intermediate/domain/entities/list_story.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/delete_token_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/get_all_story.dart';
-
+import 'package:story_app_dicoding_intermediate/domain/use_case/get_token_usecase.dart';
 import '../../../common/error/failure.dart';
 import '../../../common/state_enum.dart';
 
@@ -18,7 +18,17 @@ class HomeProvider extends ChangeNotifier {
   RequestState _state = RequestState.empty;
   RequestState get state => _state;
 
-  HomeProvider({required this.getAllStory});
+  final GetTokenUseCase getTokenUseCase;
+  
+  final DeleteTokenUseCase _deleteTokenUseCase;
+  DeleteTokenUseCase get deleteTokenUseCase => _deleteTokenUseCase;
+
+  HomeProvider(
+    this._deleteTokenUseCase,
+    this.getTokenUseCase, {
+    required this.getAllStory,
+
+  });
 
   Future<void> fetchAllStory(BuildContext context, String token) async {
     final listStory = await getAllStory.execute(token);
@@ -79,6 +89,23 @@ class HomeProvider extends ChangeNotifier {
           backgroundColor: Colors.red,
         ));
       }
+    }
+  }
+
+  Future<void> loadStories(BuildContext context) async {
+    try {
+      final token = await getTokenUseCase.execute();
+
+      if (token != null) {
+        // if (context.mounted) {
+        fetchAllStory(context, token);
+        // }
+      } else {
+        log('Token not found');
+        throw Exception('Token not found');
+      }
+    } catch (e) {
+      log('Error loading token: $e');
     }
   }
 }
