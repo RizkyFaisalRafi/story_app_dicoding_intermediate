@@ -20,7 +20,7 @@ class ErrorStateWidget extends StatelessWidget {
                 width: 300,
                 height: 300,
               ),
-              Text(
+              const Text(
                 'Tidak Ada Koneksi Internet!',
                 // style: GoogleFonts.robotoCondensed(
                 //   fontSize: 16,
@@ -43,7 +43,7 @@ class ErrorStateWidget extends StatelessWidget {
                 width: 300,
                 height: 300,
               ),
-              Text(
+              const Text(
                 'Terjadi Kesalahan Pada Server!',
                 // style: GoogleFonts.robotoCondensed(
                 //   fontSize: 16,
