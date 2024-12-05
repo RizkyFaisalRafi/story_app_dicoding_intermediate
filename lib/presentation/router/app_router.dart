@@ -9,28 +9,13 @@ import 'route_constants.dart';
 class AppRouter {
   final router = GoRouter(
     debugLogDiagnostics: true, // Log Route
-    initialLocation: RouteConstants.splashPath, // First Screen
+    initialLocation: RouteConstants.addStoryGuestPath, // First Screen
     routes: [
       // Splash Page
       GoRoute(
         name: RouteConstants.splash,
         path: RouteConstants.splashPath,
         builder: (context, state) => const SplashPage(),
-      ),
-
-      // Login Page
-      GoRoute(
-        name: RouteConstants.login,
-        path: RouteConstants.loginPath,
-        builder: (context, state) => const LoginPage(),
-        routes: [
-          // Register Page
-          GoRoute(
-            name: RouteConstants.register,
-            path: RouteConstants.registerPath,
-            builder: (context, state) => const RegisterPage(),
-          ),
-        ],
       ),
 
       // Home Page
@@ -70,6 +55,22 @@ class AppRouter {
         name: RouteConstants.addStoryGuest,
         path: RouteConstants.addStoryGuestPath,
         builder: (context, state) => const AddStoryGuestPage(),
+        routes: [
+          // Login Page
+          GoRoute(
+            name: RouteConstants.login,
+            path: RouteConstants.loginPath,
+            builder: (context, state) => const LoginPage(),
+            routes: [
+              // Register Page
+              GoRoute(
+                name: RouteConstants.register,
+                path: RouteConstants.registerPath,
+                builder: (context, state) => const RegisterPage(),
+              ),
+            ],
+          ),
+        ],
       ),
     ],
   );
