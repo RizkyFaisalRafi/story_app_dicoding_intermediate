@@ -19,8 +19,7 @@ class SplashPage extends StatelessWidget {
         if (!isAuth) {
           if (context.mounted) {
             context.goNamed(
-              // RouteConstants.addStoryGuest,
-              RouteConstants.login,
+              RouteConstants.addStoryGuest,
             );
           }
         } else {
