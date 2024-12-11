@@ -9,46 +9,13 @@ import 'route_constants.dart';
 class AppRouter {
   final router = GoRouter(
     debugLogDiagnostics: true, // Log Route
-    initialLocation: RouteConstants.addStoryGuestPath, // First Screen
+    initialLocation: RouteConstants.splashPath, // First Screen
     routes: [
       // Splash Page
       GoRoute(
         name: RouteConstants.splash,
         path: RouteConstants.splashPath,
         builder: (context, state) => const SplashPage(),
-      ),
-
-      // Home Page
-      GoRoute(
-        name: RouteConstants.home,
-        path: RouteConstants.homePath,
-        builder: (context, state) {
-          // final token = state.extra as String?;
-          // log('Received token in HomePage: $token');
-
-          // if (token == null || token.isEmpty) {
-          //   return Scaffold(
-          //     body: Center(
-          //       child: Column(
-          //         mainAxisAlignment: MainAxisAlignment.center,
-          //         children: [
-          //           const Text('Error: Token is not found!'),
-          //           ElevatedButton(
-          //             onPressed: () {
-          //               // Menghapus data otentikasi dari penyimpanan lokal
-          //               AuthLocalDatasourceImpl().deleteToken();
-          //             },
-          //             child: const Text('Keluar Akun'),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   );
-          // }
-          return const HomePage(
-              // queryToken: token,
-              );
-        },
       ),
 
       GoRoute(
@@ -67,6 +34,17 @@ class AppRouter {
                 name: RouteConstants.register,
                 path: RouteConstants.registerPath,
                 builder: (context, state) => const RegisterPage(),
+              ),
+              
+              // Home Page
+              GoRoute(
+                name: RouteConstants.home,
+                path: RouteConstants.homePath,
+                builder: (context, state) {
+                  return const HomePage(
+                      // queryToken: token,
+                      );
+                },
               ),
             ],
           ),
