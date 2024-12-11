@@ -1,32 +1,31 @@
 import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app_dicoding_intermediate/common/state_enum.dart';
+import 'package:story_app_dicoding_intermediate/presentation/design_system/components/spaces.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/theme.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/home_provider.dart';
 import '../../design_system/widgets/error_state_widget.dart';
+import '../../design_system/widgets/story_card.dart';
 
+// *Halaman utama aplikasi yang menampilkan daftar cerita
 class HomePage extends StatelessWidget {
-  const HomePage({
-    super.key,
-  });
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Mengambil HomeProvider untuk mengelola status cerita
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
 
-    // Panggil loadStories saat halaman pertama kali dibuka
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        homeProvider.loadStories(context);
-      },
-    );
+    // Memanggil fungsi loadStories hanya sekali ketika halaman pertama kali dibuka
+    Future.microtask(() => homeProvider.loadStories(context));
 
     return Scaffold(
       body: Stack(
         children: [
-          // Latar Belakang Blur
+          // Latar belakang dengan efek blur.
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
             child: Container(
@@ -34,8 +33,10 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
+          // Konten utama menggunakan CustomScrollView untuk efek sliver
           CustomScrollView(
             slivers: [
+              // AppBar dengan tombol logout
               SliverAppBar(
                 backgroundColor: const Color(0xffFC6A67),
                 centerTitle: true,
@@ -47,13 +48,35 @@ class HomePage extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
+                actions: [
+                  InkWell(
+                    onTap: () async {
+                      await homeProvider.deleteTokenUseCase.execute();
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Berhasil Keluar Akun'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        context.pop(context);
+                      }
+                    },
+                    child: const Icon(Icons.logout),
+                  ),
+                  const SpaceWidth(defaultMargin), // Ruang kosong antar ikon
+                ],
               ),
+
+              // Menggunakan Consumer untuk menangani perubahan status
               Consumer<HomeProvider>(
                 builder: (context, provider, _) {
                   final stories = provider.listStory;
                   final stateData = provider.state;
+
+                  // Menangani berbagai kondisi (error, loading, empty, loaded)
                   if (stateData == RequestState.error) {
-                    log(provider.errorMessage ?? 'Null Bray');
+                    log(provider.errorMessage ?? 'Error terjadi');
                     return ErrorStateWidget(
                       message: provider.errorMessage ?? 'Null',
                     );
@@ -69,70 +92,20 @@ class HomePage extends StatelessWidget {
                         child: Text('No stories available'),
                       ),
                     );
-                  } else if (stateData == RequestState.loaded) {
+                  } else {
+                    // Jika cerita sudah berhasil dimuat, tampilkan daftar cerita
                     return SliverList.builder(
                       itemCount: stories.length,
                       itemBuilder: (context, index) {
                         final story = stories[index];
-                        return Card(
-                          margin: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 12,
-                          ),
-                          child: ListTile(
-                            leading: SizedBox(
-                              width: 100,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  fit: BoxFit.cover,
-                                  story.photoUrl,
-                                ),
-                              ),
-                            ),
-                            title: Text(story.name),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Description: ${story.description}',
-                                  maxLines: 1,
-                                ),
-                                Text(
-                                  'Id: ${story.id}',
-                                  maxLines: 1,
-                                ),
-                                Text(
-                                  'Created at: ${story.createdAt}',
-                                  maxLines: 1,
-                                ),
-                                Text(
-                                  'Latitude: ${story.lat}',
-                                  maxLines: 1,
-                                ),
-                                Text(
-                                  'Longitude: ${story.lon}',
-                                  maxLines: 1,
-                                ),
-                              ],
-                            ),
-                            onTap: () async {
-                              // Menghapus data otentikasi dari penyimpanan lokal
-                              await homeProvider.deleteTokenUseCase.execute();
-                            },
-                          ),
-                        );
+                        return StoryCard(story: story);
                       },
-                    );
-                  } else {
-                    return const SliverToBoxAdapter(
-                      child: Text('Undefined State'),
                     );
                   }
                 },
               ),
             ],
-          )
+          ),
         ],
       ),
     );
