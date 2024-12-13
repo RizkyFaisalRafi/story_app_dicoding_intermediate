@@ -36,12 +36,17 @@ class _CameraScreenState extends State<CameraScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.detached) {
       _cameraProvider?.disposeCamera();
     } else if (state == AppLifecycleState.resumed) {
-      if (_cameraProvider?.controller != null) {
-        _cameraProvider!
-            .initializeCamera(_cameraProvider!.controller!.description);
+      // Inisialisasi ulang kamera dengan kamera terakhir yang digunakan
+      if (_cameraProvider?.controller == null ||
+          !_cameraProvider!.isCameraInitialized) {
+        final lastCamera = _cameraProvider?.isBackCameraSelected ?? true
+            ? widget.cameras.first
+            : widget.cameras.last;
+        _cameraProvider?.initializeCamera(lastCamera);
       }
     }
   }

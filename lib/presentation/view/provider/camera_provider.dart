@@ -9,6 +9,7 @@ class CameraProvider with ChangeNotifier {
 
   CameraController? get controller => _controller;
   bool get isCameraInitialized => _isCameraInitialized;
+  bool get isBackCameraSelected => _isBackCameraSelected;
 
   Future<void> initializeCamera(CameraDescription cameraDescription) async {
     final previousCameraController = _controller;
@@ -18,21 +19,17 @@ class CameraProvider with ChangeNotifier {
     try {
       await _controller!.initialize();
       _isCameraInitialized = _controller!.value.isInitialized;
+      notifyListeners();
     } on CameraException catch (e) {
       log('Error initializing camera: $e');
     }
-
-    // Pastikan notifyListeners dipanggil setelah widget tree selesai dibangun
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      notifyListeners();
-    });
   }
 
   void switchCamera(List<CameraDescription> cameras) {
     if (cameras.length == 1) return;
 
     _isBackCameraSelected = !_isBackCameraSelected;
-    initializeCamera(cameras[_isBackCameraSelected ? 1 : 0]);
+    initializeCamera(cameras[_isBackCameraSelected ? 0 : 1]);
   }
 
   void disposeCamera() {
