@@ -10,4 +10,8 @@ abstract class StoryRepository {
   });
 
   // Detail Story
+  Future<Either<Failure, ListStory>> getDetailStory({
+    required String token,
+    required String id,
+  });
 }
