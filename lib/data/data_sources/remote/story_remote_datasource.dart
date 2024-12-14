@@ -15,6 +15,10 @@ abstract class StoryRemoteDatasource {
   });
 
   // Fungsi untuk detail story
+  Future<ListStoryModel> getDetailStory({
+    required String token,
+    required String id,
+  });
 }
 
 class StoryRemoteDatasourceImpl implements StoryRemoteDatasource {
@@ -55,5 +59,57 @@ class StoryRemoteDatasourceImpl implements StoryRemoteDatasource {
         throw ServerException;
       }
     }
+  }
+
+  @override
+  Future<ListStoryModel> getDetailStory(
+      {required String token, required String id}) async {
+    final url = Uri.parse('$baseUrl/stories/$id');
+
+    try {
+      final response = await client.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        log('Response status: ${response.statusCode}, body: ${response.body}');
+        // return ListStoryModel.fromJson(jsonDecode(response.body));
+        final responseData = jsonDecode(response.body) as Map<String, dynamic>;
+        if (responseData['story'] == null) {
+          throw ServerException; // Jika data story null
+        }
+        return ListStoryModel.fromJson(responseData['story']);
+      } else if (response.statusCode == 401) {
+        log('Response status: ${response.statusCode}, body: ${response.body}');
+        throw const StatusCodeException(message: 'Missing authentication');
+      } else {
+        // Status kode lain dianggap sebagai error server
+        log('Response status: ${response.statusCode}, body: ${response.body}');
+        throw StatusCodeException(
+            message: 'Failed to Fetch Data ${response.statusCode}');
+      }
+    } on SocketException {
+      throw const SocketException("No Internet connection");
+    }
+    // catch (e) {
+    //   final response = await client.get(
+    //     url,
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': 'Bearer $token',
+    //     },
+    //   );
+    //   log('Error caught during fetch: $e');
+    //   if (e is StatusCodeException) {
+    //     rethrow; // Tetap lempar StatusCodeException
+    //   } else {
+    //     log('Unexpected error details: ${response.body}');
+    //     throw ServerException;
+    //   }
+    // }
   }
 }
