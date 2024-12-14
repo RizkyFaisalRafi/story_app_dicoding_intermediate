@@ -6,10 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:story_app_dicoding_intermediate/common/state_enum.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/components/spaces.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/theme.dart';
-import 'package:story_app_dicoding_intermediate/presentation/router/route_constants.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/home_provider.dart';
 import '../../design_system/widgets/error_state_widget.dart';
 import '../../design_system/widgets/story_card.dart';
+import '../../router/app_router.dart';
 
 // *Halaman utama aplikasi yang menampilkan daftar cerita
 class HomePage extends StatelessWidget {
@@ -64,7 +64,10 @@ class HomePage extends StatelessWidget {
                             backgroundColor: Colors.red,
                           ),
                         );
-                        context.goNamed(RouteConstants.login);
+
+                        context.goNamed(
+                          RouteConstants.login,
+                        );
                       }
                     },
                     child: const Icon(Icons.logout),
@@ -82,8 +85,10 @@ class HomePage extends StatelessWidget {
                   // Menangani berbagai kondisi (error, loading, empty, loaded)
                   if (stateData == RequestState.error) {
                     log(provider.errorMessage ?? 'Error terjadi');
-                    return ErrorStateWidget(
-                      message: provider.errorMessage ?? 'Null',
+                    return SliverToBoxAdapter(
+                      child: ErrorStateWidget(
+                        message: provider.errorMessage ?? 'Null',
+                      ),
                     );
                   } else if (stateData == RequestState.loading) {
                     return const SliverToBoxAdapter(
@@ -99,12 +104,14 @@ class HomePage extends StatelessWidget {
                     );
                   } else {
                     // Jika cerita sudah berhasil dimuat, tampilkan daftar cerita
-                    return SliverList.builder(
-                      itemCount: stories.length,
-                      itemBuilder: (context, index) {
-                        final story = stories[index];
-                        return StoryCard(story: story);
-                      },
+                    return SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final story = stories[index];
+                          return StoryCard(story: story);
+                        },
+                        childCount: stories.length,
+                      ),
                     );
                   }
                 },
