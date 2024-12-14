@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:go_router/go_router.dart';
 import '../../../domain/entities/list_story.dart';
+import '../../router/app_router.dart';
 
 class StoryCard extends StatelessWidget {
   final ListStory story;
@@ -19,6 +20,15 @@ class StoryCard extends StatelessWidget {
             child: Image.network(
               fit: BoxFit.cover,
               story.photoUrl,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.broken_image_rounded);
+              },
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
             ),
           ),
         ),
@@ -37,7 +47,11 @@ class StoryCard extends StatelessWidget {
           ],
         ),
         onTap: () async {
-          // Menangani interaksi dengan cerita, bisa ditambahkan navigasi ke detail cerita
+          // Menangani interaksi dengan cerita, bisa ditambahkan navigasi ke detail cerita by id
+          context.goNamed(
+            RouteConstants.detailStory,
+            extra: story,
+          );
         },
       ),
     );
