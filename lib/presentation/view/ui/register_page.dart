@@ -8,9 +8,8 @@ import 'package:provider/provider.dart';
 import '../../design_system/components/button.dart';
 import '../../design_system/components/spaces.dart';
 import '../../design_system/constants/theme.dart';
+import '../../router/app_router.dart';
 import '../provider/register_provider.dart';
-import '../../router/route_constants.dart';
-
 import '../../../common/state_enum.dart';
 import '../../design_system/components/custom_text_field.dart';
 

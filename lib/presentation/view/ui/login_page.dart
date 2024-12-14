@@ -11,10 +11,9 @@ import '../../design_system/components/spaces.dart';
 import '../../design_system/constants/theme.dart';
 import '../../design_system/widgets/dialog_animate.dart';
 import '../../design_system/widgets/logo_button.dart';
+import '../../router/app_router.dart';
 import '../provider/login_provider.dart';
-import '../../router/route_constants.dart';
 import 'package:wx_divider/wx_divider.dart';
-
 import '../../../common/state_enum.dart';
 
 class LoginPage extends StatelessWidget {

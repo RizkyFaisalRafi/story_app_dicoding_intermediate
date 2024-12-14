@@ -5,8 +5,8 @@ import '../../../common/error/failure.dart';
 import '../../../domain/entities/register.dart';
 import '../../../domain/repositories/auth_repository.dart';
 import '../../../domain/use_case/post_register.dart';
-import '../../router/route_constants.dart';
 import '../../../common/state_enum.dart';
+import '../../router/app_router.dart';
 
 class RegisterProvider extends ChangeNotifier {
   final AuthRepository authRepository;

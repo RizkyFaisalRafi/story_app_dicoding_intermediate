@@ -9,7 +9,7 @@ import '../../../domain/entities/login_result.dart';
 import '../../../domain/repositories/auth_repository.dart';
 import '../../../domain/repositories/token_repository.dart';
 import '../../../domain/use_case/post_login.dart';
-import '../../router/route_constants.dart';
+import '../../router/app_router.dart';
 
 class LoginProvider extends ChangeNotifier {
   LoginProvider({

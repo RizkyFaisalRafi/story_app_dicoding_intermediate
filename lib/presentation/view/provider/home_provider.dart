@@ -19,7 +19,7 @@ class HomeProvider extends ChangeNotifier {
   RequestState get state => _state;
 
   final GetTokenUseCase getTokenUseCase;
-  
+
   final DeleteTokenUseCase _deleteTokenUseCase;
   DeleteTokenUseCase get deleteTokenUseCase => _deleteTokenUseCase;
 
@@ -27,7 +27,6 @@ class HomeProvider extends ChangeNotifier {
     this._deleteTokenUseCase,
     this.getTokenUseCase, {
     required this.getAllStory,
-
   });
 
   Future<void> fetchAllStory(BuildContext context, String token) async {
@@ -97,9 +96,10 @@ class HomeProvider extends ChangeNotifier {
       final token = await getTokenUseCase.execute();
 
       if (token != null) {
-        // if (context.mounted) {
+        log('Token != Null');
+        if (context.mounted) {
         fetchAllStory(context, token);
-        // }
+        }
       } else {
         log('Token not found');
         throw Exception('Token not found');

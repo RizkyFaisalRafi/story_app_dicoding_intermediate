@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/splash_provider.dart';
-import '../../router/route_constants.dart';
+import '../../router/app_router.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
