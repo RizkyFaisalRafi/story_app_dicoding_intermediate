@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:story_app_dicoding_intermediate/common/state_enum.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/components/spaces.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/theme.dart';
+import 'package:story_app_dicoding_intermediate/presentation/router/route_constants.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/home_provider.dart';
 import '../../design_system/widgets/error_state_widget.dart';
 import '../../design_system/widgets/story_card.dart';
@@ -20,7 +21,11 @@ class HomePage extends StatelessWidget {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
 
     // Memanggil fungsi loadStories hanya sekali ketika halaman pertama kali dibuka
-    Future.microtask(() => homeProvider.loadStories(context));
+    // Future.microtask(() => homeProvider.loadStories(context));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      homeProvider.loadStories(context);
+    });
 
     return Scaffold(
       body: Stack(
@@ -59,7 +64,7 @@ class HomePage extends StatelessWidget {
                             backgroundColor: Colors.red,
                           ),
                         );
-                        context.pop(context);
+                        context.goNamed(RouteConstants.login);
                       }
                     },
                     child: const Icon(Icons.logout),
