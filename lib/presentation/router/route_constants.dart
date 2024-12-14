@@ -1,21 +1,27 @@
+part of 'app_router.dart';
+
 class RouteConstants {
+  /// route for [HomePage]
+  static const String home = 'home';
+  static const String homePath = '/home';
+  
   /// route for page [SplashPage]
-  static const String splash = 'splash_';
-  static const String splashPath = '/splash_';
+  static const String splash = 'splash';
+  static const String splashPath = '/splash';
 
   /// route for page [LoginPage]
-  static const String login = 'login_';
-  static const String loginPath = '/login_';
+  static const String login = 'login';
+  static const String loginPath = 'login';
 
   /// route for [RegisterPage]
-  static const String register = 'register_';
-  static const String registerPath = '/register_';
-
-  /// route for [HomePage]
-  static const String home = 'home_';
-  static const String homePath = '/home_';
+  static const String register = 'register';
+  static const String registerPath = 'register';
 
   /// route for page [AddStoryGuestPage]
-  static const String addStoryGuest = 'add_story_guest_';
-  static const String addStoryGuestPath = '/add_story_guest_';
+  static const String addStoryGuest = 'add-story-guest';
+  static const String addStoryGuestPath = '/add_story_guest';
+
+  /// route for page [DetailStoryPage]
+  static const String detailStory = 'detail-story';
+  static const String detailStoryPath = 'detail-story';
 }
