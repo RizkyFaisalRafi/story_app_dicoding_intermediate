@@ -47,6 +47,15 @@ class LoginPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
+                actions: [
+                  IconButton(
+                    tooltip: 'Add Story Guest',
+                    icon: const Icon(Icons.person_4_rounded),
+                    onPressed: () {
+                      context.goNamed(RouteConstants.addStoryGuest);
+                    },
+                  ),
+                ],
               ),
               SliverList(
                 delegate: SliverChildListDelegate([
@@ -90,6 +99,7 @@ class LoginPage extends StatelessWidget {
                                   controller: provider.emailController,
                                   label: 'Email',
                                 ),
+                                
                                 const SpaceHeight(24),
 
                                 // Form Password

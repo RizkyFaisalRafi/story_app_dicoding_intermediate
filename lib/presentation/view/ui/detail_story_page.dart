@@ -7,6 +7,7 @@ import 'package:story_app_dicoding_intermediate/domain/entities/list_story.dart'
 import 'package:story_app_dicoding_intermediate/presentation/design_system/components/spaces.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/datetime_formatting.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/detail_provider.dart';
+import 'package:wx_divider/wx_divider.dart';
 import '../../design_system/constants/theme.dart';
 import '../../design_system/widgets/error_state_widget.dart';
 
@@ -177,6 +178,79 @@ class DetailStoryPage extends StatelessWidget {
                                           'Lat: ${stories.lat}, Long: ${stories.lon}'),
                                     ),
                                   ),
+
+                                  const SpaceHeight(24),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: WxDivider(
+                                          color: Colors.black,
+                                          pattern: WxDivider.solid,
+                                          gradient: LinearGradient(colors: [
+                                            Colors.grey.shade200,
+                                            Colors.grey.shade300,
+                                            Colors.grey.shade400,
+                                            Colors.grey,
+                                          ]),
+                                          thickness: 2.0,
+                                          lines: 1,
+                                          direction: Axis.horizontal,
+                                        ),
+                                      ),
+                                      const SpaceWidth(20),
+                                      const Text('Full Image'),
+                                      const SpaceWidth(20),
+                                      Expanded(
+                                        child: WxDivider(
+                                          color: Colors.black,
+                                          pattern: WxDivider.solid,
+                                          gradient: LinearGradient(colors: [
+                                            Colors.grey,
+                                            Colors.grey.shade400,
+                                            Colors.grey.shade300,
+                                            Colors.grey.shade200,
+                                          ]),
+                                          thickness: 2.0,
+                                          lines: 1,
+                                          direction: Axis.horizontal,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  const SpaceHeight(24),
+
+                                  Expanded(
+                                    child: Image.network(
+                                      stories.photoUrl,
+                                      width: double.infinity,
+                                      fit: BoxFit.contain,
+                                      loadingBuilder: (BuildContext context,
+                                          Widget child,
+                                          ImageChunkEvent? loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child; // Gambar sudah dimuat
+                                        }
+                                        return const Center(
+                                          heightFactor: 4,
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      },
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        // Menampilkan gambar default atau widget lain jika gagal load gambar
+                                        return const Icon(
+                                          size: 200,
+                                          Icons.broken_image_rounded,
+                                          color: Colors.red,
+                                        );
+                                      },
+                                    ),
+                                  ),
+
+                                  const SpaceHeight(24),
                                 ],
                               ),
                             ),
