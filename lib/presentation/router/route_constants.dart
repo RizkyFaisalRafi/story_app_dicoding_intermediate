@@ -9,9 +9,9 @@ class RouteConstants {
   static const String splash = 'splash';
   static const String splashPath = '/splash';
 
-  /// route for page [LoginPage]
+  /// route for page [LoginPageWrapper]
   static const String login = 'login';
-  static const String loginPath = 'login';
+  static const String loginPath = '/login';
 
   /// route for [RegisterPage]
   static const String register = 'register';
@@ -23,9 +23,13 @@ class RouteConstants {
 
   /// route for page [AddStoryUserPage]
   static const String addStoryUser = 'add-story-user';
-  static const String addStoryUserPath = '/add_story_user';
+  static const String addStoryUserPath = 'add_story_user';
 
   /// route for page [DetailStoryPage]
   static const String detailStory = 'detail-story';
   static const String detailStoryPath = 'detail-story';
+
+  /// route for page [BottomNavBar]
+  static const String bottomNavBar = 'bottom-nav-bar';
+  static const String bottomNavBarPath = '/bottom-nav-bar';
 }

@@ -26,7 +26,7 @@ class SplashPage extends StatelessWidget {
           // Sudah Login
           if (context.mounted) {
             context.goNamed(
-              RouteConstants.home,
+              RouteConstants.bottomNavBar,
             );
           }
         }

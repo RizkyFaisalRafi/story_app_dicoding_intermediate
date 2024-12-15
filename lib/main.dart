@@ -11,7 +11,6 @@ import 'package:story_app_dicoding_intermediate/domain/use_case/get_all_story.da
 import 'package:story_app_dicoding_intermediate/domain/use_case/get_token_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/is_auth_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/post_add_user_story.dart';
-import 'package:story_app_dicoding_intermediate/domain/use_case/save_token_usecase.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/add_story_guest_provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/add_story_user_provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/camera_provider.dart';
@@ -21,9 +20,8 @@ import 'package:story_app_dicoding_intermediate/presentation/view/provider/splas
 import 'data/data_sources/local/auth_local_datasource.dart';
 import 'data/data_sources/remote/auth_remote_datasource.dart';
 import 'data/repository/token_repository_impl.dart';
-import 'domain/use_case/post_login.dart';
 import 'domain/use_case/post_register.dart';
-import 'presentation/view/provider/login_provider.dart';
+import 'presentation/view/provider/bottomnavbar_provider.dart';
 import 'presentation/view/provider/register_provider.dart';
 import 'package:http/http.dart' as http;
 import 'data/repository/auth_repository_impl.dart';
@@ -52,6 +50,7 @@ class MyApp extends StatelessWidget {
     final remoteDataSourceDetailStory =
         StoryRemoteDatasourceImpl(client: httpClient);
 
+    // Inisialisasi Repository
     final repository = AuthRepositoryImpl(remoteDataSource: remoteDataSource);
     final repositoryHome =
         StoryRepositoryImpl(storyRemoteDatasource: remoteDataSourceHome);
@@ -67,18 +66,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         // Tidak menggunakan Dependency Injection
-        // Login Provider
-        ChangeNotifierProvider(
-          create: (_) => LoginProvider(
-            saveTokenUseCase: SaveTokenUseCase(tokenRepository),
-            tokenRepository: tokenRepository,
-            postLogin: PostLogin(repository),
-            authRepository: AuthRepositoryImpl(
-              remoteDataSource: remoteDataSource,
-            ),
-          ),
-        ),
-
         // Register Provider
         ChangeNotifierProvider(
           create: (_) => RegisterProvider(
@@ -132,6 +119,11 @@ class MyApp extends StatelessWidget {
             GetTokenUseCase(tokenRepository),
           ),
         ),
+
+        // BottomNavBar Provider
+        ChangeNotifierProvider(
+          create: (context) => BottomnavbarProvider(),
+        ),
       ],
       child: MaterialApp.router(
         title: 'Story App Dicoding Intermidiate',
@@ -143,7 +135,6 @@ class MyApp extends StatelessWidget {
         routeInformationParser: router.routeInformationParser,
         routeInformationProvider: router.routeInformationProvider,
         debugShowCheckedModeBanner: false,
-        // home: const LoginPage(),
       ),
     );
   }

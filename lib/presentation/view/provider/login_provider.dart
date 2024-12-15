@@ -133,9 +133,13 @@ class LoginProvider extends ChangeNotifier {
 
             if (context.mounted) {
               // Navigasi ke halaman utama
+              // context.goNamed(
+              //   RouteConstants.home,
+              //   extra: data.token,
+              // );
+
               context.goNamed(
-                RouteConstants.home,
-                extra: data.token,
+                RouteConstants.bottomNavBar,
               );
               log('Navigating to Home with token: ${data.token}');
 
@@ -156,18 +160,7 @@ class LoginProvider extends ChangeNotifier {
             }
           }
 
-          // // Kirim Token ke HomePage
-          // context.goNamed(
-          //   RouteConstants.home,
-          //   extra: data.token,
-          // );
-          // log('Navigating to Home with token: ${data.token}');
-
-          // // Tampilkan pesan sukses
-          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          //   content: Text('Welcome ${data.name}!'),
-          //   backgroundColor: Colors.green,
-          // ));
+          log('Navigating to Home with token: ${data.token}');
         },
       );
     } catch (e) {
@@ -188,10 +181,10 @@ class LoginProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    notifyListeners();
     log("LoginProvider disposed");
     _emailController.dispose();
     _passwordController.dispose();
+
     super.dispose();
   }
 }

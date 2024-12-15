@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_app_dicoding_intermediate/domain/entities/list_story.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/add_story_guest_page.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/add_story_user_page.dart';
+import 'package:story_app_dicoding_intermediate/presentation/view/ui/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/detail_story_page.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/splash_page.dart';
+import 'package:story_app_dicoding_intermediate/presentation/view/wrapper/login_page_wrapper.dart';
 import '../view/ui/home_page.dart';
-import '../view/ui/login_page.dart';
 import '../view/ui/register_page.dart';
 part 'route_constants.dart';
 
@@ -15,72 +17,75 @@ class AppRouter {
     initialLocation: RouteConstants.splashPath, // First Screen
 
     routes: [
-      // Splash Page
+      // *Splash Page
       GoRoute(
         name: RouteConstants.splash,
         path: RouteConstants.splashPath,
         builder: (context, state) => const SplashPage(),
       ),
 
-      // Home Page
-      GoRoute(
-        name: RouteConstants.home,
-        path: RouteConstants.homePath,
-        builder: (context, state) {
-          return const HomePage(
-              // queryToken: token,
-              );
-        },
-        routes: [
-          // Detail Story Page
-          GoRoute(
-              name: RouteConstants.detailStory,
-              path: RouteConstants.detailStoryPath,
-              builder: (context, state) {
-                final listStory = state.extra as ListStory;
-                return DetailStoryPage(
-                  listStory: listStory,
-                );
-              }),
-
-          // // Add Story User
-          // GoRoute(
-          //   name: RouteConstants.addStoryUser,
-          //   path: RouteConstants.addStoryUserPath,
-          //   builder: (context, state) => const AddStoryUserPage(),
-          // ),
-        ],
-      ),
-
-      // Add Story User
-      GoRoute(
-        name: RouteConstants.addStoryUser,
-        path: RouteConstants.addStoryUserPath,
-        builder: (context, state) => const AddStoryUserPage(),
-      ),
-
-      // Add Story Guest
+      // *Add Story Guest
       GoRoute(
         name: RouteConstants.addStoryGuest,
         path: RouteConstants.addStoryGuestPath,
         builder: (context, state) => const AddStoryGuestPage(),
+      ),
+
+      // *Login Page
+      GoRoute(
+        name: RouteConstants.login,
+        path: RouteConstants.loginPath,
+        builder: (context, state) => const LoginPageWrapper(),
         routes: [
-          // Login Page
+          // *Register Page
           GoRoute(
-            name: RouteConstants.login,
-            path: RouteConstants.loginPath,
-            builder: (context, state) => const LoginPage(),
-            routes: [
-              // Register Page
-              GoRoute(
-                name: RouteConstants.register,
-                path: RouteConstants.registerPath,
-                builder: (context, state) => const RegisterPage(),
-              ),
-            ],
+            name: RouteConstants.register,
+            path: RouteConstants.registerPath,
+            builder: (context, state) => const RegisterPage(),
+          ),
+        ],
+      ),
+
+      /// Bottom Navigation Bar [root]
+      GoRoute(
+        name: RouteConstants.bottomNavBar,
+        path: RouteConstants.bottomNavBarPath,
+        builder: (context, state) => const BottomNavBar(),
+        routes: [
+          // *Detail Story Page
+          GoRoute(
+            name: RouteConstants.detailStory,
+            path: RouteConstants.detailStoryPath,
+            builder: (context, state) {
+              final listStory = state.extra as ListStory;
+              return DetailStoryPage(
+                listStory: listStory,
+              );
+            },
+          ),
+
+          // *Add Story User
+          GoRoute(
+            name: RouteConstants.addStoryUser,
+            path: RouteConstants.addStoryUserPath,
+            builder: (context, state) => const AddStoryUserPage(),
           ),
         ],
       ),
     ],
+
+    errorPageBuilder: (context, state) {
+      return MaterialPage(
+        key: state.pageKey,
+        child: Scaffold(
+          body: Center(
+            child: Text(
+              state.error.toString(),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
+    },
   );
 }

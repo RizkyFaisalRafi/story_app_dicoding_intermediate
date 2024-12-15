@@ -22,6 +22,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LoginProvider>(context, listen: false);
+
     return Scaffold(
       body: Stack(
         children: [
