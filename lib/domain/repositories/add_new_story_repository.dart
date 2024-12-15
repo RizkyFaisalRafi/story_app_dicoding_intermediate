@@ -14,5 +14,12 @@ abstract class AddNewStoryRepository {
   );
 
   // *Add New Story User
-  // Future<Either<Failure, AddNewStory>> addNewStoryUser();
+  Future<Either<Failure, AddNewStoryEntity>> addNewStoryUser(
+    String description,
+    List<int> bytes,
+    double lat,
+    double lon,
+    String fileName,
+    String token,
+  );
 }

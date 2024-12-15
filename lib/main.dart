@@ -10,8 +10,10 @@ import 'package:story_app_dicoding_intermediate/domain/use_case/delete_token_use
 import 'package:story_app_dicoding_intermediate/domain/use_case/get_all_story.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/get_token_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/is_auth_usecase.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/post_add_user_story.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/save_token_usecase.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/add_story_guest_provider.dart';
+import 'package:story_app_dicoding_intermediate/presentation/view/provider/add_story_user_provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/camera_provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/detail_provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/home_provider.dart';
@@ -120,6 +122,14 @@ class MyApp extends StatelessWidget {
           create: (context) => DetailProvider(
             GetTokenUseCase(tokenRepository),
             getDetailStory: GetDetailStory(storyRepository: detailRepository),
+          ),
+        ),
+
+        // AddStoryUserProvider
+        ChangeNotifierProvider(
+          create: (context) => AddStoryUserProvider(
+            postAddUserStory: PostAddUserStory(tokenGuestStory),
+            GetTokenUseCase(tokenRepository),
           ),
         ),
       ],

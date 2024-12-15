@@ -51,4 +51,43 @@ class AddNewStoryRepositoryImpl implements AddNewStoryRepository {
           ServerFailure("Kesalahan tidak terduga AddNewStoryRepoImpl: $e"));
     }
   }
+
+  @override
+  Future<Either<Failure, AddNewStoryEntity>> addNewStoryUser(
+    String description,
+    List<int> bytes,
+    double lat,
+    double lon,
+    String fileName,
+    String token,
+  ) async {
+    try {
+      // *Memanggil data source untuk menambahkan cerita melalui API
+      final response = await addStoryRemoteDatasource.addStoryUserAccount(
+        description,
+        bytes,
+        lat,
+        lon,
+        fileName,
+        token,
+      );
+      // *Jika API mengembalikan error
+      if (response.error == true) {
+        return Left(
+            ServerFailure('Add New Story Guest failed: ${response.message}'));
+      } else {
+        log(response.toString()); // *Log respons hasil dari data source
+
+        // *Mengonversi model ke entitas dan mengembalikan hasil sukses
+        return Right(response.toEntity());
+      }
+    } on SocketException {
+      // *Menangani No Internet atau Network Issue
+      return const Left(ConnectionFailure("failed to connect to the network"));
+    } catch (e) {
+      // *Menangani kesalahan lainnya yang tidak terduga
+      return Left(
+          ServerFailure("Kesalahan tidak terduga AddNewStoryRepoImpl: $e"));
+    }
+  }
 }

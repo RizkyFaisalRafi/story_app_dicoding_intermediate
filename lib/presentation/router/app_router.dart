@@ -1,12 +1,12 @@
 import 'package:go_router/go_router.dart';
 import 'package:story_app_dicoding_intermediate/domain/entities/list_story.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/add_story_guest_page.dart';
+import 'package:story_app_dicoding_intermediate/presentation/view/ui/add_story_user_page.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/detail_story_page.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/splash_page.dart';
 import '../view/ui/home_page.dart';
 import '../view/ui/login_page.dart';
 import '../view/ui/register_page.dart';
-// import 'route_constants.dart';
 part 'route_constants.dart';
 
 class AppRouter {
@@ -42,9 +42,24 @@ class AppRouter {
                   listStory: listStory,
                 );
               }),
+
+          // // Add Story User
+          // GoRoute(
+          //   name: RouteConstants.addStoryUser,
+          //   path: RouteConstants.addStoryUserPath,
+          //   builder: (context, state) => const AddStoryUserPage(),
+          // ),
         ],
       ),
 
+      // Add Story User
+      GoRoute(
+        name: RouteConstants.addStoryUser,
+        path: RouteConstants.addStoryUserPath,
+        builder: (context, state) => const AddStoryUserPage(),
+      ),
+
+      // Add Story Guest
       GoRoute(
         name: RouteConstants.addStoryGuest,
         path: RouteConstants.addStoryGuestPath,

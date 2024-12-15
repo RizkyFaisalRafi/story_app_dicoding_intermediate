@@ -1,10 +1,8 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:story_app_dicoding_intermediate/common/error/failure.dart';
 import 'package:story_app_dicoding_intermediate/domain/entities/list_story.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/get_detail_story.dart';
-
 import '../../../common/state_enum.dart';
 import '../../../domain/use_case/get_token_usecase.dart';
 
@@ -28,7 +26,7 @@ class DetailProvider extends ChangeNotifier {
       final token = await getTokenUseCase.execute();
 
       if (token == null || token.isEmpty) {
-        throw ServerFailure('Token tidak valid atau kosong.');
+        throw const ServerFailure('Token tidak valid atau kosong.');
       }
 
       final response = await getDetailStory.execute(id, token);

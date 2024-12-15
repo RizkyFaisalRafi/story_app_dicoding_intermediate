@@ -54,6 +54,17 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 actions: [
+                  IconButton(
+                    icon: const Icon(Icons.add_box_rounded),
+                    onPressed: () {
+                      // Add Story User Account Function
+                      context.goNamed(
+                        RouteConstants.addStoryUser,
+                      );
+                    },
+                  ),
+                  const SpaceWidth(8.0),
+
                   InkWell(
                     onTap: () async {
                       await homeProvider.deleteTokenUseCase.execute();
