@@ -8,7 +8,7 @@ import '../../domain/entities/login_result.dart';
 import '../../domain/entities/register.dart';
 import '../../domain/repositories/auth_repository.dart';
 
-class AuthRepositoryImpl extends AuthRepository {
+class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDatasource remoteDataSource;
 
   AuthRepositoryImpl({required this.remoteDataSource});
@@ -63,11 +63,6 @@ class AuthRepositoryImpl extends AuthRepository {
       if (result.error) {
         return Left(ServerFailure('Register failed: ${result.message}'));
       } else {
-        // Mapping RegisterResponseModel ke Register
-        // final register = Register(
-        //   message: result.message,
-        //   error: result.error,
-        // );
         log(register.toString());
         // return Right(register);
         return Right(result.toEntity());
