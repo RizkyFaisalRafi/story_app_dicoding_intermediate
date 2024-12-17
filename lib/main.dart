@@ -3,10 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:story_app_dicoding_intermediate/data/data_sources/remote/add_story_remote_datasource.dart';
 import 'package:story_app_dicoding_intermediate/data/data_sources/remote/story_remote_datasource.dart';
 import 'package:story_app_dicoding_intermediate/data/repository/add_new_story_repository_impl.dart';
+import 'package:story_app_dicoding_intermediate/data/repository/email_local_reporitory_impl.dart';
 import 'package:story_app_dicoding_intermediate/data/repository/name_local_reporitory_impl.dart';
 import 'package:story_app_dicoding_intermediate/data/repository/story_repository_impl.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/delete_email_local_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/delete_name_local_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/get_detail_story.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/get_email_local_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/get_name_local_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/post_add_guest_story.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/delete_token_usecase.dart';
@@ -71,6 +74,10 @@ class MyApp extends StatelessWidget {
       authLocalDatasource: localDataSource,
     );
 
+    final emailLocalRepository = EmailLocalReporitoryImpl(
+      authLocalDatasource: localDataSource,
+    );
+
     return MultiProvider(
       providers: [
         // Tidak menggunakan Dependency Injection
@@ -90,6 +97,7 @@ class MyApp extends StatelessWidget {
             DeleteTokenUseCase(tokenRepository),
             GetTokenUseCase(tokenRepository),
             DeleteNameLocalUsecase(nameLocalRepository: nameLocalRepository),
+            DeleteEmailLocalUsecase(emailLocalRepository: emailLocalRepository),
             getAllStory: GetAllStory(storyRepository: repositoryHome),
           ),
         ),
@@ -137,6 +145,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ProfileProvider(
             GetNameLocalUsecase(nameLocalRepository: nameLocalRepository),
+            GetEmailLocalUsecase(emailLocalRepository: emailLocalRepository),
           ),
         )
       ],

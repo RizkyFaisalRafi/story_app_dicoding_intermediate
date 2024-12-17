@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthLocalDatasource {
@@ -11,12 +10,16 @@ abstract class AuthLocalDatasource {
   Future<void> saveName(String name);
   Future<String?> getName();
   Future<void> deleteName();
+
+  Future<void> saveEmail(String name);
+  Future<String?> getEmail();
+  Future<void> deleteEmail();
 }
 
 class AuthLocalDatasourceImpl implements AuthLocalDatasource {
   static const _tokenKey = 'USER_TOKEN';
   static const _nameKey = 'USER_NAME';
-  // static const _emailKey = 'USER_EMAIL';
+  static const _emailKey = 'USER_EMAIL';
 
   // *Token Local
   @override
@@ -48,7 +51,6 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
     return token != null;
   }
 
-
   // *Name Local
   @override
   Future<void> saveName(String name) async {
@@ -73,4 +75,25 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
   }
 
   // *Email Local
+  @override
+  Future<void> saveEmail(String email) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_emailKey, email);
+    log('Email saved: $email'); // Log untuk memeriksa
+  }
+
+  @override
+  Future<String?> getEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString(_emailKey);
+    log('Email retrieved: $email'); // Log untuk memeriksa
+    return email;
+  }
+
+  @override
+  Future<void> deleteEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_emailKey);
+    log('Email deleted'); // Log untuk memeriksa
+  }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app_dicoding_intermediate/data/repository/email_local_reporitory_impl.dart';
 import 'package:story_app_dicoding_intermediate/data/repository/name_local_reporitory_impl.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/post_login.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/save_email_local_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/save_name_local_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/save_token_usecase.dart';
 import '../../../data/data_sources/local/auth_local_datasource.dart';
@@ -40,6 +42,10 @@ class LoginPageWrapper extends StatelessWidget {
       authLocalDatasource: localDataSource,
     );
 
+    final emailRepository = EmailLocalReporitoryImpl(
+      authLocalDatasource: localDataSource,
+    );
+
     // *Login Provider
     return ChangeNotifierProvider(
       create: (_) => LoginProvider(
@@ -49,6 +55,8 @@ class LoginPageWrapper extends StatelessWidget {
         saveTokenUseCase: SaveTokenUseCase(tokenRepository),
         saveNameLocalUsecase:
             SaveNameLocalUsecase(nameLocalRepository: nameRepository),
+        saveEmailLocalUsecase:
+            SaveEmailLocalUsecase(emailLocalRepository: emailRepository),
       ),
       child: const LoginPage(),
     );

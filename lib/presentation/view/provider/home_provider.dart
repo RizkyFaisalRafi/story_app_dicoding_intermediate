@@ -7,6 +7,7 @@ import 'package:story_app_dicoding_intermediate/domain/use_case/get_all_story.da
 import 'package:story_app_dicoding_intermediate/domain/use_case/get_token_usecase.dart';
 import '../../../common/error/failure.dart';
 import '../../../common/state_enum.dart';
+import '../../../domain/use_case/delete_email_local_usecase.dart';
 
 class HomeProvider extends ChangeNotifier {
   final GetAllStory getAllStory;
@@ -27,10 +28,14 @@ class HomeProvider extends ChangeNotifier {
   final DeleteNameLocalUsecase _deleteNameLocalUsecase;
   DeleteNameLocalUsecase get deleteNameLocalUsecase => _deleteNameLocalUsecase;
 
+  final DeleteEmailLocalUsecase _deleteEmailLocalUsecase;
+  DeleteEmailLocalUsecase get deleteEmailLocalUsecase => _deleteEmailLocalUsecase;
+
   HomeProvider(
     this._deleteTokenUseCase,
     this.getTokenUseCase,
-    this._deleteNameLocalUsecase, {
+    this._deleteNameLocalUsecase,
+    this._deleteEmailLocalUsecase, {
     required this.getAllStory,
   });
 

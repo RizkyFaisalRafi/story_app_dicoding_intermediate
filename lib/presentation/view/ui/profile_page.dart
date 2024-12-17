@@ -30,7 +30,7 @@ class ProfilePage extends StatelessWidget {
                   future: profileProvider.getNameLocalUsecase.execute(),
                   builder: (context, snapshot) {
                     return Text(
-                      snapshot.data ?? 'Null Woy',
+                      snapshot.data ?? 'Null Name',
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -38,14 +38,17 @@ class ProfilePage extends StatelessWidget {
                     );
                   }),
               const SizedBox(height: 8),
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.email, color: Colors.blue),
-                  SizedBox(width: 8),
-                  Text(
-                    // data.usersData?.email ?? 'Null',
-                    'johndoe@example.com',
-                  ),
+                  const Icon(Icons.email, color: Colors.blue),
+                  const SizedBox(width: 8),
+                  FutureBuilder<String?>(
+                      future: profileProvider.getEmailLocalUsecase.execute(),
+                      builder: (context, snapshot) {
+                        return Text(
+                          snapshot.data ?? 'Null Email',
+                        );
+                      }),
                 ],
               ),
             ],

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_app_dicoding_intermediate/data/data_sources/local/auth_local_datasource.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/save_email_local_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/save_token_usecase.dart';
 import '../../../common/error/failure.dart';
 import '../../../common/state_enum.dart';
@@ -19,6 +20,7 @@ class LoginProvider extends ChangeNotifier {
     required this.tokenRepository,
     required this.saveTokenUseCase,
     required this.saveNameLocalUsecase,
+    required this.saveEmailLocalUsecase,
   });
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -33,6 +35,7 @@ class LoginProvider extends ChangeNotifier {
   final TokenRepository tokenRepository;
   final SaveTokenUseCase saveTokenUseCase;
   final SaveNameLocalUsecase saveNameLocalUsecase;
+  final SaveEmailLocalUsecase saveEmailLocalUsecase;
 
   // Cek apakah sudah login
   final isAuth = AuthLocalDatasourceImpl().isAuth();
@@ -136,6 +139,9 @@ class LoginProvider extends ChangeNotifier {
 
             // Simpan Data Name di Local
             await saveNameLocalUsecase.execute(data.name);
+
+            // Simpan Data Email di Local
+            await saveEmailLocalUsecase.execute(_emailController.text);
 
             if (context.mounted) {
               // Navigasi ke halaman utama
