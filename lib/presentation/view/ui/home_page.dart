@@ -67,7 +67,9 @@ class HomePage extends StatelessWidget {
 
                   InkWell(
                     onTap: () async {
+                      // Delete Local Data TOKEN, NAME, EMAIL. 
                       await homeProvider.deleteTokenUseCase.execute();
+                      await homeProvider.deleteNameLocalUsecase.execute();
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

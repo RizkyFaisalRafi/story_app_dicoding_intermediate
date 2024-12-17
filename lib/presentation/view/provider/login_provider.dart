@@ -9,6 +9,7 @@ import '../../../domain/entities/login_result.dart';
 import '../../../domain/repositories/auth_repository.dart';
 import '../../../domain/repositories/token_repository.dart';
 import '../../../domain/use_case/post_login.dart';
+import '../../../domain/use_case/save_name_local_usecase.dart';
 import '../../router/app_router.dart';
 
 class LoginProvider extends ChangeNotifier {
@@ -17,6 +18,7 @@ class LoginProvider extends ChangeNotifier {
     required this.authRepository,
     required this.tokenRepository,
     required this.saveTokenUseCase,
+    required this.saveNameLocalUsecase,
   });
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -30,6 +32,7 @@ class LoginProvider extends ChangeNotifier {
   final AuthRepository authRepository;
   final TokenRepository tokenRepository;
   final SaveTokenUseCase saveTokenUseCase;
+  final SaveNameLocalUsecase saveNameLocalUsecase;
 
   // Cek apakah sudah login
   final isAuth = AuthLocalDatasourceImpl().isAuth();
@@ -130,6 +133,9 @@ class LoginProvider extends ChangeNotifier {
             // Simpan Data Token menggunakan TokenRepository di Local
             // await tokenRepository.saveToken(data.token); // Sama saja
             await saveTokenUseCase.execute(data.token);
+
+            // Simpan Data Name di Local
+            await saveNameLocalUsecase.execute(data.name);
 
             if (context.mounted) {
               // Navigasi ke halaman utama

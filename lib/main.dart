@@ -3,8 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:story_app_dicoding_intermediate/data/data_sources/remote/add_story_remote_datasource.dart';
 import 'package:story_app_dicoding_intermediate/data/data_sources/remote/story_remote_datasource.dart';
 import 'package:story_app_dicoding_intermediate/data/repository/add_new_story_repository_impl.dart';
+import 'package:story_app_dicoding_intermediate/data/repository/name_local_reporitory_impl.dart';
 import 'package:story_app_dicoding_intermediate/data/repository/story_repository_impl.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/delete_name_local_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/get_detail_story.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/get_name_local_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/post_add_guest_story.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/delete_token_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/get_all_story.dart';
@@ -16,6 +19,7 @@ import 'package:story_app_dicoding_intermediate/presentation/view/provider/add_s
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/camera_provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/detail_provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/home_provider.dart';
+import 'package:story_app_dicoding_intermediate/presentation/view/provider/profile_provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/splash_provider.dart';
 import 'data/data_sources/local/auth_local_datasource.dart';
 import 'data/data_sources/remote/auth_remote_datasource.dart';
@@ -63,6 +67,10 @@ class MyApp extends StatelessWidget {
     final detailRepository =
         StoryRepositoryImpl(storyRemoteDatasource: remoteDataSourceDetailStory);
 
+    final nameLocalRepository = NameLocalReporitoryImpl(
+      authLocalDatasource: localDataSource,
+    );
+
     return MultiProvider(
       providers: [
         // Tidak menggunakan Dependency Injection
@@ -81,6 +89,7 @@ class MyApp extends StatelessWidget {
           create: (context) => HomeProvider(
             DeleteTokenUseCase(tokenRepository),
             GetTokenUseCase(tokenRepository),
+            DeleteNameLocalUsecase(nameLocalRepository: nameLocalRepository),
             getAllStory: GetAllStory(storyRepository: repositoryHome),
           ),
         ),
@@ -124,6 +133,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => BottomnavbarProvider(),
         ),
+
+        ChangeNotifierProvider(
+          create: (context) => ProfileProvider(
+            GetNameLocalUsecase(nameLocalRepository: nameLocalRepository),
+          ),
+        )
       ],
       child: MaterialApp.router(
         title: 'Story App Dicoding Intermidiate',

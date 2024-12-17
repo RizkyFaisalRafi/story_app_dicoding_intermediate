@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:story_app_dicoding_intermediate/domain/entities/list_story.dart';
+import 'package:story_app_dicoding_intermediate/domain/use_case/delete_name_local_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/delete_token_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/get_all_story.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/get_token_usecase.dart';
@@ -23,9 +24,13 @@ class HomeProvider extends ChangeNotifier {
   final DeleteTokenUseCase _deleteTokenUseCase;
   DeleteTokenUseCase get deleteTokenUseCase => _deleteTokenUseCase;
 
+  final DeleteNameLocalUsecase _deleteNameLocalUsecase;
+  DeleteNameLocalUsecase get deleteNameLocalUsecase => _deleteNameLocalUsecase;
+
   HomeProvider(
     this._deleteTokenUseCase,
-    this.getTokenUseCase, {
+    this.getTokenUseCase,
+    this._deleteNameLocalUsecase, {
     required this.getAllStory,
   });
 
@@ -98,7 +103,7 @@ class HomeProvider extends ChangeNotifier {
       if (token != null) {
         log('Token != Null');
         if (context.mounted) {
-        fetchAllStory(context, token);
+          fetchAllStory(context, token);
         }
       } else {
         log('Token not found');
