@@ -28,6 +28,7 @@ import 'data/data_sources/local/auth_local_datasource.dart';
 import 'data/data_sources/remote/auth_remote_datasource.dart';
 import 'data/repository/token_repository_impl.dart';
 import 'domain/use_case/post_register.dart';
+import 'presentation/view/provider/about_app_provider.dart';
 import 'presentation/view/provider/bottomnavbar_provider.dart';
 import 'presentation/view/provider/contact_us_provider.dart';
 import 'presentation/view/provider/register_provider.dart';
@@ -154,6 +155,11 @@ class MyApp extends StatelessWidget {
         // Contact Us Provider
         ChangeNotifierProvider(
           create: (context) => ContactUsProvider(),
+        ),
+
+        // About App Provider
+        ChangeNotifierProvider(
+          create: (context) => AboutAppProvider(),
         ),
       ],
       child: MaterialApp.router(

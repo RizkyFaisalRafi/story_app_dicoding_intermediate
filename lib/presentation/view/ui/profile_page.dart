@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/components/spaces.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/theme.dart';
-import 'package:story_app_dicoding_intermediate/presentation/design_system/widgets/story_card.dart';
 import 'package:story_app_dicoding_intermediate/presentation/router/app_router.dart';
 import '../../design_system/widgets/list_profile.dart';
 import '../provider/profile_provider.dart';
@@ -79,14 +78,6 @@ class ProfilePage extends StatelessWidget {
             const SpaceHeight(8),
             ListProfile(
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) {
-                //       return const ContactUsScreen();
-                //     },
-                //   ),
-                // );
                 context.goNamed(RouteConstants.contactUs);
               },
               imagePath: 'assets/icons/contact_us_profil.svg',
@@ -96,14 +87,7 @@ class ProfilePage extends StatelessWidget {
             const SpaceHeight(8),
             ListProfile(
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) {
-                //       return const AboutAppPage();
-                //     },
-                //   ),
-                // );
+                context.goNamed(RouteConstants.aboutApp);
               },
               imagePath: 'assets/icons/about_app_profil.svg',
               title: 'Tentang Aplikasi',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_app_dicoding_intermediate/domain/entities/list_story.dart';
+import 'package:story_app_dicoding_intermediate/presentation/view/ui/about_app_page.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/add_story_guest_page.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/add_story_user_page.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/bottom_nav_bar/bottom_nav_bar.dart';
@@ -85,6 +86,13 @@ class AppRouter {
             name: RouteConstants.contactUs,
             path: RouteConstants.contactUsPath,
             builder: (context, state) => const ContactUsPage(),
+          ),
+
+          // *About App Page
+          GoRoute(
+            name: RouteConstants.aboutApp,
+            path: RouteConstants.aboutAppPath,
+            builder: (context, state) => const AboutAppPage(),
           ),
         ],
       ),

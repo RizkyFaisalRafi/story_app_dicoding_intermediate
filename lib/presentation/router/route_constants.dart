@@ -40,4 +40,8 @@ class RouteConstants {
   /// route for page [ContactUsPage]
   static const String contactUs = 'contact-us';
   static const String contactUsPath = 'contact-us';
+
+  /// route for page [AboutAppPage]
+  static const String aboutApp = 'about-app';
+  static const String aboutAppPath = 'about-app';
 }
