@@ -53,5 +53,14 @@
 	<string>Buka privasi ini untuk akses mikrofon.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Buka privasi ini untuk akses galeri foto.</string>
+
+	<!-- Url Lancher Configuration -->
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tel</string>
+		<string>mailto</string>
+		<string>https</string>
+	</array>
+
 </dict>
 </plist>
