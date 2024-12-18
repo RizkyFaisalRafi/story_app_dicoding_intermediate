@@ -23,13 +23,6 @@ class HomePage extends StatelessWidget {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     final provider = Provider.of<HomeProvider>(context);
 
-    // Memanggil fungsi loadStories hanya sekali ketika halaman pertama kali dibuka
-    // Future.microtask(() => homeProvider.loadStories(context));
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   homeProvider.loadStories(context);
-    // });
-
     return Scaffold(
       body: Stack(
         children: [
@@ -86,10 +79,10 @@ class HomePage extends StatelessWidget {
                         );
                       },
                     ),
-                    const SpaceWidth(8.0),
 
-                    InkWell(
-                      onTap: () async {
+                    IconButton(
+                      icon: const Icon(Icons.logout),
+                      onPressed: () async {
                         // Delete Local Data TOKEN, NAME, EMAIL.
                         await homeProvider.deleteTokenUseCase.execute();
                         await homeProvider.deleteNameLocalUsecase.execute();
@@ -103,13 +96,14 @@ class HomePage extends StatelessWidget {
                             ),
                           );
 
+                          // Navigate Login
                           context.goNamed(
                             RouteConstants.login,
                           );
                         }
                       },
-                      child: const Icon(Icons.logout),
                     ),
+
                     const SpaceWidth(defaultMargin), // Ruang kosong antar ikon
                   ],
                 ),
