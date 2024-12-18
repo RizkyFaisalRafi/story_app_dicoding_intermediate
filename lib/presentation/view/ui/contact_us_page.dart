@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app_dicoding_intermediate/presentation/design_system/common/common.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/theme.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/contact_us_provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/components/spaces.dart';
@@ -18,8 +19,8 @@ class _ContactUsPageState extends State<ContactUsPage> {
     final provider = Provider.of<ContactUsProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Hubungi Kami',
+        title: Text(
+          AppLocalizations.of(context)!.titleContactUs,
         ),
       ),
       body: Padding(
@@ -29,7 +30,8 @@ class _ContactUsPageState extends State<ContactUsPage> {
           children: [
             // Deskripsi Keluhan
             Text(
-              'Untuk keluhan, kritik, dan saran dalam penggunaan aplikasi List Story Dicoding Intermediate, Anda dapat menghubungi:',
+              // 'Untuk keluhan, kritik, dan saran dalam penggunaan aplikasi List Story Dicoding Intermediate, Anda dapat menghubungi:',
+              AppLocalizations.of(context)!.titleComplaintDescription,
               style: fontPoppins.copyWith(
                 fontSize: sizeMedium,
               ),
@@ -95,7 +97,8 @@ class _ContactUsPageState extends State<ContactUsPage> {
 
             // Deskripsi Jam Kerja
             Text(
-              'Hubungi saya pada saat jam kerja:\n09:00 - 16:00 WIB',
+              // 'Hubungi saya pada saat jam kerja:\n09:00 - 16:00 WIB',
+              AppLocalizations.of(context)!.titleWorkHourDescription,
               style: fontPoppins.copyWith(
                 fontSize: sizeMedium,
               ),

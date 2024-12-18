@@ -28,6 +28,7 @@ import 'data/data_sources/local/auth_local_datasource.dart';
 import 'data/data_sources/remote/auth_remote_datasource.dart';
 import 'data/repository/token_repository_impl.dart';
 import 'domain/use_case/post_register.dart';
+import 'presentation/design_system/common/common.dart';
 import 'presentation/view/provider/about_app_provider.dart';
 import 'presentation/view/provider/bottomnavbar_provider.dart';
 import 'presentation/view/provider/contact_us_provider.dart';
@@ -164,6 +165,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         title: 'Story App Dicoding Intermidiate',
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,

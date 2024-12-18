@@ -1,0 +1,27 @@
+{
+      "titleDicodingStory": "Dicoding Story",
+      "titleDescription": "Description: {description}",
+      "tittleHome": "Home",
+      "tittleFavorite": "Favorite",
+      "tittleProfile": "Profile",
+      "tittleComingSoon": "Coming Soon",
+      "tittleLatitude": "Latitude: {latitude}",
+      "tittleLongitude": "Longitude: {longitude}",
+      "titleSetting": "Setting",
+      "subTittleSetting": "Application Settings.",
+      "titleContactUs": "Contact Us",
+      "subTittleContactUs": "Convey Obstacles, Criticisms, and Suggestions.",
+      "titleAboutApp": "About App",
+      "subTitleAboutApp": "View complete information about the application.",
+      "titleComplaintDescription": "For complaints, criticisms, and suggestions in using the List Story Dicoding Intermediate application, you can contact:",
+      "titleWorkHourDescription": "Contact me during business hours:\n09:00 - 16:00 WIB",
+
+      "titleDicodingStoryApp": "Dicoding Story Application",
+      "titleVersionApp": "Version 1.0.0",
+      "titleContentAboutApp": "The Story App application is designed to provide an easy and fun story sharing experience to users. With a simple yet intuitive interface, this application allows users to upload stories in the form of text or photos. I hope this application can be accepted to get the Flutter Intermediate Dicoding Certification Later.",
+      "titleDevelopedBy": "Developed by:",
+      "titleNameDeveloper": "Rizky Faisal Rafi",
+      "titleEmailDeveloper": "Email: rizkyfaisalrafi123@gmail.com",
+      "titleFollowSocialMedia": "Follow me on social media:"
+
+}

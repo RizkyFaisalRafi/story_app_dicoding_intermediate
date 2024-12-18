@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/provider/bottomnavbar_provider.dart';
 
+import '../../../design_system/common/common.dart';
+
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
 
@@ -12,10 +14,19 @@ class BottomNavBar extends StatelessWidget {
     return Scaffold(
       body: provider.tabs[provider.bottomNavIndex],
       bottomNavigationBar: ConvexAppBar(
-        items: const [
-          TabItem(icon: Icons.home, title: 'Home'),
-          TabItem(icon: Icons.favorite, title: 'Favorite'),
-          TabItem(icon: Icons.person, title: 'Profile'),
+        items: [
+          TabItem(
+            icon: Icons.home,
+            title: AppLocalizations.of(context)!.tittleHome,
+          ),
+          TabItem(
+            icon: Icons.favorite,
+            title: AppLocalizations.of(context)!.tittleFavorite,
+          ),
+          TabItem(
+            icon: Icons.person,
+            title: AppLocalizations.of(context)!.tittleProfile,
+          ),
         ],
         initialActiveIndex: provider.bottomNavIndex,
         onTap: (index) => provider.bottomNavIndex = index,

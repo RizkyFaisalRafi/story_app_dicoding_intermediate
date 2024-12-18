@@ -4,6 +4,7 @@ import 'package:story_app_dicoding_intermediate/presentation/design_system/compo
 import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/datetime_formatting.dart';
 import '../../../domain/entities/list_story.dart';
 import '../../router/app_router.dart';
+import '../common/common.dart';
 
 class StoryCard extends StatelessWidget {
   final ListStory story;
@@ -40,7 +41,9 @@ class StoryCard extends StatelessWidget {
           children: [
             // *Description
             Text(
-              'Description: ${story.description}',
+              // 'Description: ${story.description}',
+              // '${AppLocalizations.of(context)!.titleDescription}: ${story.description}',
+              AppLocalizations.of(context)!.titleDescription(story.description),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -67,7 +70,9 @@ class StoryCard extends StatelessWidget {
                 const SpaceWidth(8),
                 Expanded(
                   child: Text(
-                    story.createdAt!.toDate,
+                    // story.createdAt!.toDate,
+                    story.createdAt!.toLocalizedDate(
+                        Localizations.localeOf(context).languageCode),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -80,7 +85,11 @@ class StoryCard extends StatelessWidget {
               children: [
                 const Icon(Icons.location_pin, color: Colors.blue, size: 20),
                 const SpaceWidth(8),
-                Text('Latitude: ${story.lat}', maxLines: 1),
+                Text(
+                  // 'Latitude: ${story.lat}',
+                  AppLocalizations.of(context)!.tittleLatitude(story.lat ?? 0),
+                  maxLines: 1,
+                ),
               ],
             ),
 
@@ -89,7 +98,11 @@ class StoryCard extends StatelessWidget {
               children: [
                 const Icon(Icons.location_pin, color: Colors.blue, size: 20),
                 const SpaceWidth(8),
-                Text('Longitude: ${story.lon}', maxLines: 1),
+                Text(
+                  // 'Longitude: ${story.lon}',
+                  AppLocalizations.of(context)!.tittleLongitude(story.lon ?? 0),
+                  maxLines: 1,
+                ),
               ],
             ),
           ],

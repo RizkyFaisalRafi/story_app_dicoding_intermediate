@@ -162,7 +162,13 @@ class DetailStoryPage extends StatelessWidget {
                                           color: Colors.teal),
                                       title: const Text('Created At'),
                                       subtitle:
-                                          Text(stories.createdAt?.toDate ?? ''),
+                                          // Text(stories.createdAt?.toDate ?? ''),
+                                          Text(
+                                        stories.createdAt!.toLocalizedDate(
+                                          Localizations.localeOf(context)
+                                              .languageCode,
+                                        ),
+                                      ),
                                     ),
                                   ),
 

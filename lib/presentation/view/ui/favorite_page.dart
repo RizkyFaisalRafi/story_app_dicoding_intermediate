@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../design_system/common/common.dart';
+
 class FavoritePage extends StatelessWidget {
   const FavoritePage({super.key});
 
@@ -7,10 +9,14 @@ class FavoritePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Favorite'),
+        title: Text(
+          AppLocalizations.of(context)!.tittleFavorite,
+        ),
       ),
-      body: const Center(
-        child: Text('Favorite Page'),
+      body: Center(
+        child: Text(
+          AppLocalizations.of(context)!.tittleComingSoon,
+        ),
       ),
     );
   }

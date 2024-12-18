@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app_dicoding_intermediate/common/state_enum.dart';
+import 'package:story_app_dicoding_intermediate/presentation/design_system/common/common.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/components/spaces.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/theme.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/widgets/card_skelton.dart';
@@ -12,6 +13,7 @@ import '../../design_system/widgets/error_state_widget.dart';
 import '../../design_system/widgets/story_card.dart';
 import '../../router/app_router.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:app_settings/app_settings.dart';
 
 // *Halaman utama aplikasi yang menampilkan daftar cerita
 class HomePage extends StatelessWidget {
@@ -62,13 +64,24 @@ class HomePage extends StatelessWidget {
                   backgroundColor: const Color(0xffFC6A67),
                   centerTitle: true,
                   title: Text(
-                    'Home Page',
+                    // 'Dicoding Story',
+                    AppLocalizations.of(context)!.titleDicodingStory,
                     style: fontPoppins.copyWith(
                       fontSize: 24,
                       fontWeight: weightSemiBold,
                       color: Colors.white,
                     ),
                   ),
+
+                  // Settings
+                  leading: IconButton(
+                    onPressed: () {
+                      AppSettings.openAppSettings(type: AppSettingsType.device);
+                    },
+                    icon: const Icon(Icons.settings),
+                  ),
+
+                  // Add Story User and LogOut
                   actions: [
                     IconButton(
                       icon: const Icon(Icons.add_box_rounded),

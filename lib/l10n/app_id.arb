@@ -1,0 +1,55 @@
+{
+        "titleDicodingStory": "Cerita Dicoding",
+        "titleDescription": "Deskripsi: {description}",
+                "@titleDescription": {
+                        "description": "Deskripsi variabel description",
+                        "placeholders": {
+                                "description": {
+                                        "type": "String"
+                                }
+                        }
+                },
+
+        "tittleHome": "Beranda",
+        "tittleFavorite": "Favorit",
+        "tittleProfile": "Profil",
+        "tittleComingSoon": "Segera Hadir",
+        "tittleLatitude": "Lintang: {latitude}",
+                "@tittleLatitude": {
+                        "description": "Deskripsi variabel latitude",
+                        "placeholders": {
+                                "latitude": {
+                                        "type": "double"
+                                }
+                        }
+                },
+
+        "tittleLongitude": "Bujur: {longitude}",
+                "@tittleLongitude": {
+                        "description": "Deskripsi variabel longitude",
+                        "placeholders": {
+                                "longitude": {
+                                        "type": "double"
+                                }
+                        }
+                },
+
+        "titleSetting": "Pengaturan",
+        "subTittleSetting": "Pengaturan Aplikasi",
+        "titleContactUs": "Hubungi Kami",
+        "subTittleContactUs": "Sampaikan Kendala, Kritik, dan Saran.",
+        "titleAboutApp": "Tentang Aplikasi",
+        "subTitleAboutApp": "Lihat informasi lengkap tentang aplikasi.",
+
+        "titleComplaintDescription": "Untuk keluhan, kritik, dan saran dalam penggunaan aplikasi List Story Dicoding Intermediate, Anda dapat menghubungi:",
+        "titleWorkHourDescription": "Hubungi saya pada saat jam kerja:\n09:00 - 16:00 WIB",
+
+        "titleDicodingStoryApp": "Aplikasi Cerita Dicoding",
+        "titleVersionApp": "Versi 1.0.0",
+        "titleContentAboutApp": "Aplikasi Story App dirancang untuk memberikan pengalaman berbagi cerita yang mudah dan menyenangkan kepada pengguna. Dengan tampilan antarmuka yang sederhana namun intuitif, aplikasi ini memungkinkan pengguna untuk mengunggah cerita dalam bentuk teks maupun foto. Saya berharap aplikasi ini dapat diterima untuk mendapatkan Sertifikasi Dicoding Flutter Intermediate Nantinya.",
+        "titleDevelopedBy": "Dikembangkan oleh:",
+        "titleNameDeveloper": "Rizky Faisal Rafi",
+        "titleEmailDeveloper": "Email: rizkyfaisalrafi123@gmail.com",
+        "titleFollowSocialMedia": "Ikuti saya di media sosial:"
+
+}

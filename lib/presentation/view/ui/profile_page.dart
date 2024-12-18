@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/components/spaces.dart';
 import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/theme.dart';
 import 'package:story_app_dicoding_intermediate/presentation/router/app_router.dart';
+import '../../design_system/common/common.dart';
 import '../../design_system/widgets/list_profile.dart';
 import '../provider/profile_provider.dart';
 
@@ -17,7 +18,9 @@ class ProfilePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(
+          AppLocalizations.of(context)!.tittleProfile,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(defaultMargin),
@@ -68,12 +71,11 @@ class ProfilePage extends StatelessWidget {
             const SpaceHeight(28),
             ListProfile(
               onTap: () {
-                // Navigator.pushNamed(context, SettingsPage.routeName);
                 context.goNamed(RouteConstants.settings);
               },
               imagePath: 'assets/icons/settings_profil.svg',
-              title: 'Pengaturan',
-              subTitle: 'Pengaturan tentang aplikasi.',
+              title: AppLocalizations.of(context)!.titleSetting,
+              subTitle: AppLocalizations.of(context)!.subTittleSetting,
             ),
             const SpaceHeight(8),
             ListProfile(
@@ -81,8 +83,8 @@ class ProfilePage extends StatelessWidget {
                 context.goNamed(RouteConstants.contactUs);
               },
               imagePath: 'assets/icons/contact_us_profil.svg',
-              title: 'Hubungi Kami',
-              subTitle: 'Sampaikan kendala, kritik, dan saran Anda.',
+              title: AppLocalizations.of(context)!.titleContactUs,
+              subTitle: AppLocalizations.of(context)!.subTittleContactUs,
             ),
             const SpaceHeight(8),
             ListProfile(
@@ -90,8 +92,8 @@ class ProfilePage extends StatelessWidget {
                 context.goNamed(RouteConstants.aboutApp);
               },
               imagePath: 'assets/icons/about_app_profil.svg',
-              title: 'Tentang Aplikasi',
-              subTitle: 'Lihat informasi lengkap tentang aplikasi.',
+              title: AppLocalizations.of(context)!.titleAboutApp,
+              subTitle: AppLocalizations.of(context)!.subTitleAboutApp,
             ),
           ],
         ),
