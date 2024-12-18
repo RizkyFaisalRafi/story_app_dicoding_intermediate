@@ -32,4 +32,12 @@ class RouteConstants {
   /// route for page [BottomNavBar]
   static const String bottomNavBar = 'bottom-nav-bar';
   static const String bottomNavBarPath = '/bottom-nav-bar';
+
+  /// route for page [SettingsPage]
+  static const String settings = 'settings';
+  static const String settingsPath = 'settings';
+
+  /// route for page [ContactUsPage]
+  static const String contactUs = 'contact-us';
+  static const String contactUsPath = 'contact-us';
 }

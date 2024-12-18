@@ -29,6 +29,7 @@ import 'data/data_sources/remote/auth_remote_datasource.dart';
 import 'data/repository/token_repository_impl.dart';
 import 'domain/use_case/post_register.dart';
 import 'presentation/view/provider/bottomnavbar_provider.dart';
+import 'presentation/view/provider/contact_us_provider.dart';
 import 'presentation/view/provider/register_provider.dart';
 import 'package:http/http.dart' as http;
 import 'data/repository/auth_repository_impl.dart';
@@ -142,12 +143,18 @@ class MyApp extends StatelessWidget {
           create: (context) => BottomnavbarProvider(),
         ),
 
+        // Profile Provider
         ChangeNotifierProvider(
           create: (context) => ProfileProvider(
             GetNameLocalUsecase(nameLocalRepository: nameLocalRepository),
             GetEmailLocalUsecase(emailLocalRepository: emailLocalRepository),
           ),
-        )
+        ),
+
+        // Contact Us Provider
+        ChangeNotifierProvider(
+          create: (context) => ContactUsProvider(),
+        ),
       ],
       child: MaterialApp.router(
         title: 'Story App Dicoding Intermidiate',

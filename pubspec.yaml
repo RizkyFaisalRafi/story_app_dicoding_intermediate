@@ -54,6 +54,7 @@ dependencies:
   convex_bottom_bar: ^3.2.0
   pull_to_refresh: ^2.0.0
   shimmer: ^3.0.0
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   mockito: ^5.4.4

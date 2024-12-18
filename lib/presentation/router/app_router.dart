@@ -4,7 +4,9 @@ import 'package:story_app_dicoding_intermediate/domain/entities/list_story.dart'
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/add_story_guest_page.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/add_story_user_page.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:story_app_dicoding_intermediate/presentation/view/ui/contact_us_page.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/detail_story_page.dart';
+import 'package:story_app_dicoding_intermediate/presentation/view/ui/settings_page.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/ui/splash_page.dart';
 import 'package:story_app_dicoding_intermediate/presentation/view/wrapper/login_page_wrapper.dart';
 import '../view/ui/home_page.dart';
@@ -69,6 +71,20 @@ class AppRouter {
             name: RouteConstants.addStoryUser,
             path: RouteConstants.addStoryUserPath,
             builder: (context, state) => const AddStoryUserPage(),
+          ),
+
+          // *Settings Page
+          GoRoute(
+            name: RouteConstants.settings,
+            path: RouteConstants.settingsPath,
+            builder: (context, state) => const SettingsPage(),
+          ),
+
+          // *Contact Us Page
+          GoRoute(
+            name: RouteConstants.contactUs,
+            path: RouteConstants.contactUsPath,
+            builder: (context, state) => const ContactUsPage(),
           ),
         ],
       ),
