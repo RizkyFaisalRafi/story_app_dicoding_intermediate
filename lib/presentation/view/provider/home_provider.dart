@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:story_app_dicoding_intermediate/domain/entities/list_story.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/delete_name_local_usecase.dart';
 import 'package:story_app_dicoding_intermediate/domain/use_case/delete_token_usecase.dart';
@@ -17,7 +18,7 @@ class HomeProvider extends ChangeNotifier {
   String _errorMessage = '';
   String? get errorMessage => _errorMessage;
 
-  RequestState _state = RequestState.empty;
+  RequestState _state = RequestState.loading;
   RequestState get state => _state;
 
   final GetTokenUseCase getTokenUseCase;
@@ -29,7 +30,10 @@ class HomeProvider extends ChangeNotifier {
   DeleteNameLocalUsecase get deleteNameLocalUsecase => _deleteNameLocalUsecase;
 
   final DeleteEmailLocalUsecase _deleteEmailLocalUsecase;
-  DeleteEmailLocalUsecase get deleteEmailLocalUsecase => _deleteEmailLocalUsecase;
+  DeleteEmailLocalUsecase get deleteEmailLocalUsecase =>
+      _deleteEmailLocalUsecase;
+
+  RefreshController refreshC = RefreshController(initialRefresh: false);
 
   HomeProvider(
     this._deleteTokenUseCase,
@@ -37,11 +41,25 @@ class HomeProvider extends ChangeNotifier {
     this._deleteNameLocalUsecase,
     this._deleteEmailLocalUsecase, {
     required this.getAllStory,
-  });
+  }) {
+    loadStories();
+  }
 
-  Future<void> fetchAllStory(BuildContext context, String token) async {
-    final listStory = await getAllStory.execute(token);
+  void onRefresh() async {
+    try {
+      await loadStories();
+      refreshC.refreshCompleted();
+      notifyListeners();
+    } catch (e) {
+      notifyListeners();
+      refreshC.refreshFailed();
+    }
+  }
+
+  Future<void> fetchAllStory(String token) async {
     _state = RequestState.loading;
+    final listStory = await getAllStory.execute(token);
+
     notifyListeners();
 
     try {
@@ -66,23 +84,17 @@ class HomeProvider extends ChangeNotifier {
             _errorMessage = 'Terjadi kesalahan saat mengambil data story';
           }
           notifyListeners();
-
-          // Tampilkan pesan error ke pengguna
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(_errorMessage),
-            backgroundColor: Colors.red,
-          ));
+          refreshC.refreshFailed();
+          // Tampilkan pesan error ke developer di debug
+          log('failure HomeProvider: $_errorMessage');
         },
         (data) {
           _state = RequestState.loaded;
+          refreshC.refreshCompleted();
           _listStory = data;
           notifyListeners();
-
-          // Tampilkan pesan sukses
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Sukses Get Data'),
-            backgroundColor: Colors.green,
-          ));
+          // Tampilkan pesan sukses di debug
+          log('success HomeProvider');
         },
       );
     } catch (e) {
@@ -90,26 +102,19 @@ class HomeProvider extends ChangeNotifier {
       _errorMessage = "Kesalahan tidak terduga: $e";
       log('Unexpected error: $e');
       notifyListeners();
-
-      // Pesan default untuk error yang tidak diketahui
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Terjadi kesalahan tidak terduga: $e"),
-          backgroundColor: Colors.red,
-        ));
-      }
+      refreshC.refreshFailed();
+      //  Tampilkan pesan error ke developer di debug
+      log('catch HomeProvider: $e');
     }
   }
 
-  Future<void> loadStories(BuildContext context) async {
+  Future<void> loadStories() async {
     try {
       final token = await getTokenUseCase.execute();
 
       if (token != null) {
         log('Token != Null');
-        if (context.mounted) {
-          fetchAllStory(context, token);
-        }
+        fetchAllStory(token);
       } else {
         log('Token not found');
         throw Exception('Token not found');

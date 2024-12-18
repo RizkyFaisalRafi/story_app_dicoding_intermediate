@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_app_dicoding_intermediate/presentation/design_system/components/spaces.dart';
+import 'package:story_app_dicoding_intermediate/presentation/design_system/constants/datetime_formatting.dart';
 import '../../../domain/entities/list_story.dart';
 import '../../router/app_router.dart';
 
@@ -36,14 +38,60 @@ class StoryCard extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // *Description
             Text(
               'Description: ${story.description}',
               maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            Text('Id: ${story.id}', maxLines: 1),
-            Text('Created at: ${story.createdAt}', maxLines: 1),
-            Text('Latitude: ${story.lat}', maxLines: 1),
-            Text('Longitude: ${story.lon}', maxLines: 1),
+
+            // *Id Story
+            Row(
+              children: [
+                const Icon(Icons.code_rounded, color: Colors.blue, size: 20),
+                const SpaceWidth(8),
+                Expanded(
+                  child: Text(
+                    'Id: ${story.id}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+
+            // *Created at
+            Row(
+              children: [
+                const Icon(Icons.create, color: Colors.blue, size: 20),
+                const SpaceWidth(8),
+                Expanded(
+                  child: Text(
+                    story.createdAt!.toDate,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+
+            // *Latitude
+            Row(
+              children: [
+                const Icon(Icons.location_pin, color: Colors.blue, size: 20),
+                const SpaceWidth(8),
+                Text('Latitude: ${story.lat}', maxLines: 1),
+              ],
+            ),
+
+            // *Longitude
+            Row(
+              children: [
+                const Icon(Icons.location_pin, color: Colors.blue, size: 20),
+                const SpaceWidth(8),
+                Text('Longitude: ${story.lon}', maxLines: 1),
+              ],
+            ),
           ],
         ),
         onTap: () async {

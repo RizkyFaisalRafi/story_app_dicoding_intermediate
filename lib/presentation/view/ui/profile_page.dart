@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app_dicoding_intermediate/presentation/design_system/components/spaces.dart';
+import '../../design_system/widgets/list_profile.dart';
 import '../provider/profile_provider.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -50,6 +52,47 @@ class ProfilePage extends StatelessWidget {
                         );
                       }),
                 ],
+              ),
+              const SpaceHeight(28),
+              ListProfile(
+                onTap: () {
+                  // Navigator.pushNamed(context, SettingsPage.routeName);
+                },
+                imagePath: 'assets/icons/settings_profil.svg',
+                title: 'Pengaturan',
+                subTitle: 'Pengaturan tentang aplikasi.',
+              ),
+              const SpaceHeight(8),
+              ListProfile(
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) {
+                  //       return const ContactUsScreen();
+                  //     },
+                  //   ),
+                  // );
+                },
+                imagePath: 'assets/icons/contact_us_profil.svg',
+                title: 'Hubungi Kami',
+                subTitle: 'Sampaikan kendala, kritik, dan saran Anda.',
+              ),
+              const SpaceHeight(8),
+              ListProfile(
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) {
+                  //       return const AboutAppPage();
+                  //     },
+                  //   ),
+                  // );
+                },
+                imagePath: 'assets/icons/about_app_profil.svg',
+                title: 'Tentang Aplikasi',
+                subTitle: 'Lihat informasi lengkap tentang aplikasi.',
               ),
             ],
           ),
