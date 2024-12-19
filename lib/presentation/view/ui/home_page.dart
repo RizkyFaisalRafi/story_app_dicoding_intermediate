@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
               refresh: CircularProgressIndicator(),
               waterDropColor: Colors.blue,
               idleIcon: Icon(
-                Icons.local_dining_rounded,
+                Icons.refresh_rounded,
                 size: 20,
                 color: Colors.white,
               ),

@@ -29,13 +29,14 @@ class LoginProvider extends ChangeNotifier {
   bool _obscureText = true;
   LoginResult? _loginResult;
   String _errorMessage = '';
-  RequestState _state = RequestState.empty;
+  RequestState _state = RequestState.init;
   PostLogin postLogin;
   final AuthRepository authRepository;
   final TokenRepository tokenRepository;
   final SaveTokenUseCase saveTokenUseCase;
   final SaveNameLocalUsecase saveNameLocalUsecase;
   final SaveEmailLocalUsecase saveEmailLocalUsecase;
+  bool _isAnimating = true;
 
   // Cek apakah sudah login
   final isAuth = AuthLocalDatasourceImpl().isAuth();
@@ -48,6 +49,31 @@ class LoginProvider extends ChangeNotifier {
   LoginResult? get loginResult => _loginResult;
   String? get errorMessage => _errorMessage;
   RequestState get state => _state;
+  bool get isAnimating => _isAnimating;
+
+  addas() async {
+    log('Empty');
+    _state = RequestState.loading;
+    log('Loading');
+    notifyListeners();
+    await Future.delayed(const Duration(seconds: 3));
+    _state = RequestState.error;
+    log('Done');
+    notifyListeners();
+    await Future.delayed(const Duration(seconds: 1));
+    _state = RequestState.init;
+    notifyListeners();
+  }
+
+  void setAnimating(bool value) {
+    _isAnimating = value;
+    notifyListeners();
+  }
+
+  void resetState() {
+    _state = RequestState.init;
+    notifyListeners();
+  }
 
   // Toggle Obscure Password
   void toggleObscureText() {
@@ -94,8 +120,9 @@ class LoginProvider extends ChangeNotifier {
     try {
       final result = await postLogin.execute(email, password);
       result.fold(
-        (failure) {
+        (failure) async {
           _state = RequestState.error;
+
           _errorMessage = failure.message;
           log('Login Provider: $_errorMessage');
 
@@ -126,10 +153,17 @@ class LoginProvider extends ChangeNotifier {
               backgroundColor: Colors.red,
             ),
           );
+
+          // 3 Detik menampilkan icon pada buildSmallButton
+          await Future.delayed(const Duration(seconds: 3));
+          // Mengembalikan state ke SUBMIT / awal state
+          resetState();
+          notifyListeners();
         },
         (data) async {
           _state = RequestState.loaded;
           _loginResult = data;
+
           notifyListeners();
 
           try {
@@ -144,12 +178,6 @@ class LoginProvider extends ChangeNotifier {
             await saveEmailLocalUsecase.execute(_emailController.text);
 
             if (context.mounted) {
-              // Navigasi ke halaman utama
-              // context.goNamed(
-              //   RouteConstants.home,
-              //   extra: data.token,
-              // );
-
               context.goNamed(
                 RouteConstants.bottomNavBar,
               );
@@ -171,8 +199,6 @@ class LoginProvider extends ChangeNotifier {
               );
             }
           }
-
-          log('Navigating to Home with token: ${data.token}');
         },
       );
     } catch (e) {

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -22,15 +23,30 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LoginProvider>(context, listen: false);
+    final providerTrue = Provider.of<LoginProvider>(context, listen: true);
+
+    final width = MediaQuery.of(context).size.width;
+    final isDone = provider.state == RequestState.loaded;
+    final isError = provider.state == RequestState.error;
+    final isStretched =
+        provider.isAnimating || provider.state == RequestState.init;
 
     return Scaffold(
       body: Stack(
         children: [
-          // Latar Belakang Blur
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-            child: Container(
-              color: Colors.grey.withOpacity(0.1), // Lapisan semi-transparan
+          // Latar Belakang Blur dengan Animasi
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 1000),
+            curve: Curves.easeInOut,
+            color: providerTrue.state == RequestState.loading
+                ? Colors.grey.withOpacity(0.4)
+                : Colors.grey.withOpacity(0.1),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: providerTrue.state == RequestState.loading ? 5 : 0,
+                sigmaY: providerTrue.state == RequestState.loading ? 5 : 0,
+              ),
+              child: Container(),
             ),
           ),
 
@@ -99,7 +115,7 @@ class LoginPage extends StatelessWidget {
                                   controller: provider.emailController,
                                   label: 'Email',
                                 ),
-                                
+
                                 const SpaceHeight(24),
 
                                 // Form Password
@@ -146,22 +162,34 @@ class LoginPage extends StatelessWidget {
                                   ],
                                 ),
                                 const SpaceHeight(28),
-                                Consumer<LoginProvider>(
-                                    builder: (context, data, child) {
-                                  final stateData = data.state;
-                                  if (stateData == RequestState.empty) {
-                                    return buttonLogIn(data, context);
-                                  } else if (stateData ==
-                                      RequestState.loading) {
-                                    return const CircularProgressIndicator();
-                                  } else if (stateData == RequestState.loaded) {
-                                    return buttonLogIn(data, context);
-                                  } else if (stateData == RequestState.error) {
-                                    return buttonLogIn(data, context);
-                                  } else {
-                                    return const Text('Undefined State');
-                                  }
-                                }),
+
+                                AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 1000),
+                                  child:
+                                      providerTrue.state == RequestState.loading
+                                          ? const CircularProgressIndicator()
+                                          : buttonLogIn(providerTrue, context),
+                                ),
+
+                                Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.all(32),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 600),
+                                    curve: Curves.easeIn,
+                                    width: provider.state == RequestState.init
+                                        ? width
+                                        : 70,
+                                    onEnd: () {
+                                      // providerTrue.animat();
+                                      providerTrue.setAnimating(false);
+                                    },
+                                    height: 70,
+                                    child: isStretched
+                                        ? buildButton(context, providerTrue)
+                                        : buildSmallButton(isDone, isError),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -313,6 +341,103 @@ class LoginPage extends StatelessWidget {
       borderRadius: 12.0,
       height: 55,
       color: const Color(0xffFC6A67),
+    );
+  }
+
+  Widget buildButton(BuildContext context, LoginProvider provider) {
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        shape: const StadiumBorder(),
+        side: const BorderSide(width: 2, color: Colors.indigo),
+      ),
+      onPressed: provider.isAnimating
+          ? () {
+              log('Test 1');
+              if (provider.formKey.currentState!.validate()) {
+                try {
+                  provider.setAnimating(true); // Set animasi mulai
+                  provider.login(
+                    context,
+                  );
+                  // provider.setAnimating(false); // Set animasi selesai
+                } catch (e) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(e.toString())));
+                }
+              } else {
+                provider.setAnimating(false); // Pastikan di-reset
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Mohon isi semua form'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            }
+          : () async {
+              // await provider.addas();
+              log('Test 2');
+              if (provider.formKey.currentState!.validate()) {
+                try {
+                  provider.setAnimating(true); // Set animasi mulai
+                  provider.login(
+                    context,
+                  );
+                  provider.setAnimating(true); // Set animasi selesai
+                } catch (e) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(e.toString())));
+                }
+              } else {
+                provider.setAnimating(false); // Pastikan di-reset
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Mohon isi semua form'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+      child: const FittedBox(
+        child: Text(
+          'SUBMIT',
+          style: TextStyle(
+            fontSize: 24,
+            color: Colors.indigo,
+            letterSpacing: 1.5,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildSmallButton(bool isDone, bool isError) {
+    final color = isDone
+        ? Colors.green
+        : isError
+            ? Colors.red
+            : Colors.indigo;
+
+    return Container(
+      decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+      child: Center(
+        child: isDone
+            ? const Icon(
+                Icons.done,
+                size: 52,
+                color: Colors.white,
+              )
+            : isError
+                ? const Icon(
+                    Icons.error_outline_rounded,
+                    size: 52,
+                    color: Colors.white,
+                  )
+                : const CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+      ),
     );
   }
 }
